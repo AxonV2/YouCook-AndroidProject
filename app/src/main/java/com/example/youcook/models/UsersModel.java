@@ -1,5 +1,7 @@
 package com.example.youcook.models;
 
+import androidx.annotation.NonNull;
+
 public class UsersModel implements IUsersModel
 {
     String email;
@@ -31,5 +33,8 @@ public class UsersModel implements IUsersModel
         this.userName = UserNameValue;
         this.pictureURL = PictureURLValue;
     }
+
+
+
 
 }

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youcook.R;
 import com.example.youcook.ui.recipes.recipe_list_recycler_handlers.RecyclerViewRecipeAdapter;
-import com.example.youcook.views.MainActivity;
+import com.example.youcook.context.MainActivity;
 
 public class RecipesFragment extends Fragment {
 

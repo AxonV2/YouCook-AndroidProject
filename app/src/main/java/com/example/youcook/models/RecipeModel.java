@@ -1,5 +1,7 @@
 package com.example.youcook.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 public class RecipeModel implements IRecipeModel
@@ -88,4 +90,6 @@ public class RecipeModel implements IRecipeModel
         this.recipeLongDescription = recipeLongDescription;
         this.tags.addAll(Tags);
     }
+
+
 }

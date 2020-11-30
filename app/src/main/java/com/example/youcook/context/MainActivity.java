@@ -1,4 +1,4 @@
-package com.example.youcook.views;
+package com.example.youcook.context;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,6 +14,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.youcook.R;
+import com.example.youcook.controller.SQLiteDataAccess;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -40,10 +41,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                Snackbar.make(view, "Create Recipe Aqui, ou reportar bug ou assim sei la", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                Snackbar.make(view, "Create Recipe, ou reportar bug ou assim sei la", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
+                //Put transition here into create recipe nav
+
             }
         });
 
+        //Database Instance Creation
+        //this = MainActivity Context
+        SQLiteDataAccess YouCookDatabase = SQLiteDataAccess.getDB_instance(this);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

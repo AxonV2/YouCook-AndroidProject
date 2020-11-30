@@ -78,6 +78,7 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
     public int getItemCount()
     {
         //Will be set to FILTERED list size instead.
+        //This is what specifies how many times onBindViewHolder will run.
         return Recipes_Filtered.size();
     }
 

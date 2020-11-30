@@ -45,13 +45,12 @@ public class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerVi
 
         //Call variables held in HolderView and assign them.
         //We use the filtered list in case any filters are applied
-
-
         holder.getTagDisplay().setText(TagsRecyclerViewHolder.getRecipeTags().get(position));
 
     }
 
     @Override
+    //This is what specifies how many times onBindViewHolder will run.
     public int getItemCount()
     {
         return RecipesViewModel.getListSize();
