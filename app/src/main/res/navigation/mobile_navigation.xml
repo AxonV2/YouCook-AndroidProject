@@ -26,13 +26,27 @@
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
-        android:id="@+id/nav_favorites"
-        android:name="com.example.youcook.ui.favorites.FavoritesFragment"
-        android:label="@string/menu_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        android:id="@+id/nav_create"
+        android:name="com.example.youcook.ui.create.CreateFragment"
+        android:label="@string/menu_create"
+        tools:layout="@layout/fragment_create" />
     <fragment
         android:id="@+id/nav_selected_recipe"
         android:name="com.example.youcook.ui.recipes.SelectedRecipeFragment"
         android:label="@string/nav_recipe"
         tools:layout="@layout/fragment_selected_recipe"/>
+    <fragment
+        android:id="@+id/nav_favorites"
+        android:name="com.example.youcook.ui.recipes.RecipesFavorites"
+        android:label="@string/menu_favorites"
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_nav_favorites_to_nav_selected_recipe"
+            app:destination="@id/nav_selected_recipe"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 </navigation>

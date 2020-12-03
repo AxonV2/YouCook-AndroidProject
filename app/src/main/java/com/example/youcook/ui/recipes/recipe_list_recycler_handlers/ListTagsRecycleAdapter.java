@@ -1,4 +1,4 @@
-package com.example.youcook.ui.recipes.selected_recipe_recycler_handlers;
+package com.example.youcook.ui.recipes.recipe_list_recycler_handlers;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -9,11 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youcook.R;
-import com.example.youcook.ui.recipes.RecipesViewModel;
+import com.example.youcook.ui.recipes.selected_recipe_recycler_handlers.TagsRecyclerViewHolder;
 
-public class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerViewHolder>{
+public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerViewHolder>{
 
-    public TagsRecyclerViewAdapter() {
+    private Integer passedInTagSize;
+    private Integer passedInID;
+
+    public ListTagsRecycleAdapter(int TagSize, int ID)
+    {
+        passedInTagSize = TagSize;
+        passedInID = ID;
     }
 
     //Provide custom layout file
@@ -24,6 +30,7 @@ public class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerVi
         return R.layout.recipe_item_recycler_layout;
     }
 
+
     @NonNull
     @Override
     public TagsRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
@@ -31,8 +38,8 @@ public class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerVi
         View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
 
         //Need ViewModel for selected RecipeID
-        //Calling Static method from recipesViewModel
-        return new TagsRecyclerViewHolder(view, RecipesViewModel.getSelectedRecipeItemID().getValue());
+        //Passing in specific ID.
+        return new TagsRecyclerViewHolder(view, passedInID);
 
     }
 
@@ -43,7 +50,6 @@ public class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerVi
         //THIS IS WHERE WE WILL ASSIGN VALUES
 
         //Call variables held in HolderView and assign them.
-        //We use the filtered list in case any filters are applied
         holder.getTagDisplay().setText(TagsRecyclerViewHolder.getRecipeTags().get(position));
 
     }
@@ -52,7 +58,7 @@ public class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerVi
     //This is what specifies how many times onBindViewHolder will run.
     public int getItemCount()
     {
-        return RecipesViewModel.getTagListSize();
+        return passedInTagSize;
     }
 
 }

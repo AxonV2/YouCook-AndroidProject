@@ -1,5 +1,9 @@
 package com.example.youcook.models;
 
+import com.example.youcook.context.MainActivity;
+import com.example.youcook.controller.SQLiteDataHelper;
+import com.example.youcook.controller.SQLiteDataMain;
+
 import java.util.ArrayList;
 
 public interface IRecipeModel
@@ -21,33 +25,41 @@ public interface IRecipeModel
 
             add(new RecipeModel("Title 6", "BRICK", 80,80,100));
         }
-    };
-     */
 
 
-    ArrayList<IRecipeModel> Full_Recipe_List = new ArrayList<IRecipeModel>()
-    {
+    ArrayList<IRecipeModel> Full_Recipe_List = new ArrayList<IRecipeModel>(){
         {
-            add(new RecipeModel("Fat Cunt", "Soup with cock and balls", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " +
+            add(new RecipeModel(0,"Fat Cunt@gmail", "Soup with cock and balls", "https://i.imgur.com/exel7MP.jpg", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " +
                     "\n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck"
                     ,"Healthy Vegetable Soup!", 25, 50, 25+50,
                 new ArrayList<String>(){{ add("a"); add("Soup"); add("a"); add("Soup"); add("a"); add("Soup"); add("a"); add("Soup"); add("a"); add("Soup"); }}));
 
-            add(new RecipeModel("Fat Cunt2", "Fish and fucking chips", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck \n AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Something cool to read", 25, 50, 25+50,
+            add(new RecipeModel(1,"Fat Cunt2@gmail", "Fish and fucking chips", "https://i.imgur.com/rOGGcZw.jpeg", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck \n AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Something cool to read", 25, 50, 25+50,
                     new ArrayList<String>(){{ add("f"); add("a"); }}));
 
-            add(new RecipeModel("Fat Cunt3", "Soup with cock and balls", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck", "Cinder block hitting you on the head \n cunt", 25, 50, 25+50,
+            add(new RecipeModel(2,"Fat Cunt3@gmail", "Soup with cock and balls", "https://i.imgur.com/exel7MP.jpg", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n fuck", "Cinder block hitting you on the head \n cunt", 25, 50, 25+50,
                     new ArrayList<String>(){{ add("Vegetarian"); add("HVH"); add("Prime Minister"); add("Dog"); add("Legend"); add("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); }}));
         }
     };
+    };
+     */
+
+    //Set to Database Values
+    ArrayList<IRecipeModel> Full_Recipe_List = new ArrayList<IRecipeModel>();
+    ArrayList<IRecipeModel> Favorites_Recipe_List = new ArrayList<IRecipeModel>();
+
+    //region Getters and Setters
 
     //Getters
-
     Integer getRecipeID();
 
-    String getAuthorName();
+    Boolean getFavorite();
+
+    IUsersModel getRecipeAuthor();
 
     String getRecipeTitle();
+
+    String getRecipeImageURL();
 
     String getRecipeLongDescription();
 
@@ -61,10 +73,16 @@ public interface IRecipeModel
 
     ArrayList<String> getTags();
 
+
     //Setters
-    void setAuthorName(String val);
+
+    void setFavorite(Boolean val);
+
+    void setRecipeAuthor(IUsersModel author);
 
     void setRecipeTitle(String val);
+
+    void setRecipeImageURL(String val);
 
     void setRecipeLongDescription(String val);
 
@@ -77,4 +95,6 @@ public interface IRecipeModel
     void setDoneTime(Integer val);
 
     void setTags(ArrayList<String> val);
+
+    //endregion
 }

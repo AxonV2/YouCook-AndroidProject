@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.youcook.ui.recipes.RecipesViewModel"/>
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.recipes.SelectedRecipeFragment" >
+    tools:context=".ui.recipes.SelectedRecipeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -31,7 +38,7 @@
                 android:paddingTop="10dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="This is some temp text" />
+                tools:text="@{viewModel.getRecipeTitle()}" />
 
             <ImageView
                 android:id="@+id/FullRecipeImage"
@@ -48,7 +55,7 @@
                 android:clickable="false"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="TextView" />
+                tools:text="@{viewModel.getRecipeQuickDescription()}" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -67,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Prep X Min"
+                    android:text="@{viewModel.getRecipePrepDisplay()}"
                     android:textAlignment="center"
                     android:textSize="24sp" />
 
@@ -76,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Cook X Min"
+                    android:text="@{viewModel.getRecipeCookDisplay()}"
                     android:textAlignment="center"
                     android:textSize="24sp" />
 
@@ -85,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Done X Min"
+                    android:text="@{viewModel.getRecipeDoneDisplay()}"
                     android:textAlignment="center"
                     android:textSize="24sp" />
 
@@ -100,13 +107,13 @@
                 android:id="@+id/FullRecipeDescriptionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/description_header" />
+                android:text="@{viewModel.getRecipeTitle()}" />
 
             <TextView
                 android:id="@+id/FullRecipeLongDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="@{viewModel.getRecipeLongDescription()}" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -129,20 +136,28 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="3"
                     android:gravity="center_horizontal"
-                    android:text="nome mongoloid que fez" />
+                    android:text="@{viewModel.getRecipeAuthorName()}" />
+
+                <TextView
+                    android:id="@+id/FullRecipeAuthorEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.getRecipeAuthorEmail()}" />
+
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/FavoriteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="AddToFavorites"
+                android:text="" />
 
         </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

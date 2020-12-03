@@ -4,29 +4,48 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.youcook.R;
+import com.example.youcook.controller.SQLiteDataHelper;
+import com.example.youcook.databinding.FragmentSelectedRecipeBinding;
+import com.example.youcook.models.IRecipeModel;
+import com.example.youcook.models.RecipeModel;
 import com.example.youcook.ui.recipes.selected_recipe_recycler_handlers.TagsRecyclerViewAdapter;
+
+import java.util.stream.Collectors;
 
 public class SelectedRecipeFragment extends Fragment {
 
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        //LIVE DATA BINDINGS
+        FragmentSelectedRecipeBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_selected_recipe, container, false);
+
+        binding.setViewModel(new RecipesViewModel());
+        binding.setLifecycleOwner(this);
 
         //View used for id resources
-        View returningView = inflater.inflate(R.layout.fragment_selected_recipe, container, false);
+        View returningView = binding.getRoot();
 
         //Getting recycler in selected recipe fragment
         RecyclerView recyclerView = returningView.findViewById(R.id.FullRecipeTagRecycler);
 
-        // Add the following lines to create RecyclerView
+        //Add the following lines to create RecyclerView
+        //Every item has fixed size?
         //Used for optimization purposes, will probably have to be set to false.
         recyclerView.setHasFixedSize(true);
 
@@ -37,32 +56,72 @@ public class SelectedRecipeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
 
+        //Todo fix
 
-        final TextView RecipeTitle = returningView.findViewById(R.id.FullRecipeTitleText);
-        final TextView RecipeLongDescription = returningView.findViewById(R.id.FullRecipeLongDescription);
-        final TextView RecipeQuickDescription = returningView.findViewById(R.id.FullRecipeQuickDesc);
-        final TextView RecipePrep = returningView.findViewById(R.id.FullRecipePrepText);
-        final TextView RecipeCook = returningView.findViewById(R.id.FullRecipeCookText);
-        final TextView RecipeDone = returningView.findViewById(R.id.FullRecipeDoneText);
-        final TextView AuthorName = returningView.findViewById(R.id.FullRecipeAuthorName);
-        //Need to implement
-        final ImageView AuthorImage = returningView.findViewById(R.id.FullRecipeAuthorImage);
-        final ImageView RecipeImage = returningView.findViewById(R.id.FullRecipeImage);
+        //Recipe Image
+        ImageView recipeImage = returningView.findViewById(R.id.FullRecipeImage);
 
-        //Region Observers
-        RecipesViewModel.getRecipeTitle().observe(getViewLifecycleOwner(),  Value -> { RecipeTitle.setText(Value); });
-        RecipesViewModel.getRecipeLongDescription().observe(getViewLifecycleOwner(), Value -> { RecipeLongDescription.setText(Value); });
-        RecipesViewModel.getRecipeQuickDescription().observe(getViewLifecycleOwner(), Value -> { RecipeQuickDescription.setText(Value); });
-        RecipesViewModel.getRecipePrep().observe(getViewLifecycleOwner(), Value -> { RecipePrep.setText("Prep " + Value.toString() + " Min(s)"); });
-        RecipesViewModel.getRecipeCook().observe(getViewLifecycleOwner(), Value -> { RecipeCook.setText("Cook " + Value.toString() + " Min(s)"); });
-        RecipesViewModel.getRecipeDone().observe(getViewLifecycleOwner(), Value -> { RecipeDone.setText("Done " + Value.toString() + " Min(s)"); });
-        RecipesViewModel.getRecipeAuthorName().observe(getViewLifecycleOwner(), Value -> { AuthorName.setText(Value); });
+        Glide.with(returningView).load(RecipesViewModel.getRecipeImage())
+                .override(1000,1000)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(recipeImage);
 
 
-        //RecipesViewModel.FUCK.observe(getViewLifecycleOwner(), Image -> { RecipeImage.setText(Image); });
-        //RecipesViewModel.FUCK.observe(getViewLifecycleOwner(), Image -> { AuthorImage.setText(Image); });
+        //Author Image below recipe
+        ImageView authorImage = returningView.findViewById(R.id.FullRecipeAuthorImage);
+
+        Glide.with(returningView).load(RecipesViewModel.getAuthorImage())
+                .override(250,250)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(authorImage);
 
         //endregion
+
+        //Button to add to favorites.
+        Button favBut = returningView.findViewById(R.id.FavoriteButton);
+
+        //Favorite on click listener
+        favBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                //TODO CHANGE TO LOGGED IN USER
+                String CurrentUserEmail = RecipesViewModel.getRecipeAuthorEmail().getValue();
+                Integer CurrentRecipe = RecipesViewModel.getSelectedRecipeItemID().getValue();
+
+                //Current recipe that we're checking
+                IRecipeModel recipe = RecipeModel.Full_Recipe_List.stream().filter(x -> x.getRecipeID().equals(CurrentRecipe)).collect(Collectors.toList()).get(0);
+
+
+
+                //0 = Added to favorites
+                //1 = Removed from favorites
+                Integer res = SQLiteDataHelper.FavoritesTableHandling(CurrentUserEmail, CurrentRecipe);
+
+                if (res != 1)
+                {
+                    Toast.makeText(returningView.getContext(), "You have added " + RecipesViewModel.getRecipeTitle().getValue() + " to your favorites!", Toast.LENGTH_LONG).show();
+                    IRecipeModel.Favorites_Recipe_List.add(recipe);
+                }
+                else{
+                    Toast.makeText(returningView.getContext(), "You have removed " + RecipesViewModel.getRecipeTitle().getValue() + " from your favorites", Toast.LENGTH_LONG).show();
+                    IRecipeModel.Favorites_Recipe_List.remove(recipe);
+                }
+                RecipesViewModel.UpdateFavoritesButton();
+            }
+        });
+
+
+        //Observer for favorites button in case user clicks on it
+        RecipesViewModel.getFavoritesButton().observe(getViewLifecycleOwner(), new Observer<String>()
+        {
+            @Override
+            public void onChanged(@Nullable String s)
+            {
+                favBut.setText(s);
+            }
+        });
+
 
         return returningView;
     }

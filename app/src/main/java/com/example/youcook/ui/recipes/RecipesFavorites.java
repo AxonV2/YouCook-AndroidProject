@@ -1,32 +1,41 @@
 package com.example.youcook.ui.recipes;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.example.youcook.R;
 import com.example.youcook.context.MainActivity;
 import com.example.youcook.models.IRecipeModel;
+import com.example.youcook.models.RecipeModel;
+import com.example.youcook.ui.create.CreateViewModel;
+import com.example.youcook.ui.recipes.RecipesViewModel;
 import com.example.youcook.ui.recipes.recipe_list_recycler_handlers.RecyclerViewRecipeAdapter;
 
-public class RecipesFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
-    private RecyclerViewRecipeAdapter FullRecipeListAdapter;
+
+public class RecipesFavorites extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        //USE THIS VIEW TO GET ITEM ID'S
-        View returningView = inflater.inflate(R.layout.fragment_recipes, container, false);
+        View returningView = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         //USING VIEW TO GET RECYCLER IN SPECIFIED FRAGMENT
-        RecyclerView recyclerView = returningView.findViewById(R.id.RecipeViewer);
+        RecyclerView recyclerView = returningView.findViewById(R.id.FavoriteViewer);
 
         // Add the following lines to create RecyclerView
         //Every item has fixed size?
@@ -35,8 +44,11 @@ public class RecipesFragment extends Fragment {
 
         //Layout and Adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(returningView.getContext()));
-        FullRecipeListAdapter = new RecyclerViewRecipeAdapter(IRecipeModel.Full_Recipe_List);
-        recyclerView.setAdapter(FullRecipeListAdapter);
+
+
+        //Send FAVORITES list through adapter
+        RecyclerViewRecipeAdapter Adapter = new RecyclerViewRecipeAdapter(IRecipeModel.Favorites_Recipe_List);
+        recyclerView.setAdapter(Adapter);
 
 
         //Static menu item set in MainActivity
@@ -54,11 +66,25 @@ public class RecipesFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String filter)
             {
-                FullRecipeListAdapter.getFilter().filter(filter);
+                Adapter.getFilter().filter(filter);
                 return false;
             }
         });
 
         return returningView;
+
+        /* OBSERVER
+        recipesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>()
+        {
+            @Override
+            public void onChanged(@Nullable String s)
+            {
+                textView.setText(s);
+            }
+        });
+
+
+         */
+
     }
 }

@@ -1,33 +1,34 @@
 package com.example.youcook.models;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 
 public class RecipeModel implements IRecipeModel
 {
-    static Integer counter = 0;
-    Integer recipeID = 0;
-    String authorName;
-    String recipeTitle;
-    String recipeLongDescription;
-    String recipeQuickDescription;
-    Integer prepTime;
-    Integer cookTime;
-    Integer doneTime;
 
-    //TO DO IMAGE
-
-    ArrayList<String> tags = new ArrayList<>();
+    private Integer recipeID = 0;
+    private IUsersModel recipeAuthor = new UsersModel();
+    private String recipeTitle;
+    private String recipeImageURL;
+    private String recipeLongDescription;
+    private String recipeQuickDescription;
+    private Integer prepTime;
+    private Integer cookTime;
+    private Integer doneTime;
+    private ArrayList<String> tags = new ArrayList<>();
+    private Boolean isFavorite = false;
 
     //region GettersAndSetters
     //Getters
     @Override
     public Integer getRecipeID() { return recipeID; }
     @Override
-    public String getAuthorName() { return authorName; }
+    public Boolean getFavorite() { return isFavorite; }
+    @Override
+    public IUsersModel getRecipeAuthor() { return recipeAuthor; }
     @Override
     public String getRecipeTitle() { return recipeTitle; }
+    @Override
+    public String getRecipeImageURL() { return recipeImageURL; }
     @Override
     public String getRecipeLongDescription() { return recipeLongDescription; }
     @Override
@@ -43,9 +44,13 @@ public class RecipeModel implements IRecipeModel
 
     //Setters
     @Override
-    public void setAuthorName(String val) { authorName = val; }
+    public void setFavorite(Boolean val) { isFavorite = val; }
+    @Override
+    public void setRecipeAuthor(IUsersModel author) { recipeAuthor = author; }
     @Override
     public void setRecipeTitle(String val) { recipeTitle = val; }
+    @Override
+    public void setRecipeImageURL(String val) { recipeImageURL = val; }
     @Override
     public void setRecipeLongDescription(String val) { recipeLongDescription = val; }
     @Override
@@ -61,33 +66,18 @@ public class RecipeModel implements IRecipeModel
 
     //endregion
 
-
-    public RecipeModel(){
-
-    }
-
-    //Used for recipe list display.
-    public RecipeModel(String RecipeTitle,String RecipeQuickDescriptionValue, Integer PrepTime, Integer CookTime, Integer DoneTime )
+    public RecipeModel(Integer RecipeID, IUsersModel Author , String RecipeTitle,
+                       String ImageURL, String recipeLongDescription, String RecipeQuickDescription , Integer PrepTime, Integer CookTime, Integer DoneTime, ArrayList<String> Tags)
     {
-        counter++;
-        recipeID += counter;
-
+        this.recipeID = RecipeID;
+        this.recipeAuthor = Author;
         this.recipeTitle = RecipeTitle;
-        this.recipeQuickDescription = RecipeQuickDescriptionValue;
+        this.recipeImageURL = ImageURL;
+        this.recipeLongDescription = recipeLongDescription;
+        this.recipeQuickDescription = RecipeQuickDescription;
         this.prepTime = PrepTime;
         this.cookTime = CookTime;
         this.doneTime = DoneTime;
-    }
-
-
-    //Used for full recipe display.
-    public RecipeModel(String authorName, String RecipeTitle, String recipeLongDescription, String RecipeQuickDescriptionValue , Integer PrepTime, Integer CookTime, Integer DoneTime, ArrayList<String> Tags)
-    {
-        //Sending to upper constructor
-        this(RecipeTitle, RecipeQuickDescriptionValue, PrepTime, CookTime, DoneTime);
-
-        this.authorName = authorName;
-        this.recipeLongDescription = recipeLongDescription;
         this.tags.addAll(Tags);
     }
 

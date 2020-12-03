@@ -1,9 +1,11 @@
 package com.example.youcook.context;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,17 +16,24 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.youcook.R;
-import com.example.youcook.controller.SQLiteDataAccess;
+import com.example.youcook.controller.SQLiteDataMain;
+import com.example.youcook.controller.SQLiteDataHelper;
+import com.example.youcook.models.IRecipeModel;
+import com.example.youcook.models.UsersModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-    //Make it public and save it for fragment view.
+    //Search item public fragment view.
     static public MenuItem searchItem;
+    //Database Instance
+    static public SQLiteDataMain YouCookDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,22 +44,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton RecipeActionButton = findViewById(R.id.fab);
-        RecipeActionButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Snackbar.make(view, "Create Recipe, ou reportar bug ou assim sei la", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-
-                //Put transition here into create recipe nav
-
-            }
-        });
 
         //Database Instance Creation
         //this = MainActivity Context
-        SQLiteDataAccess YouCookDatabase = SQLiteDataAccess.getDB_instance(this);
+        YouCookDatabase = SQLiteDataMain.getDB_instance(this);
+        //to view DB go to VIEW -> TOOL WINDOW -> DEVICE FILE EXPLORER
+        //then DATA -> DATA -> APP FOLDER (YOUCOOK) -> DATABASES -> Select and export
+            SQLiteDataHelper.GiveValues();
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         //Here we pass in each created navigation
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_recipes, R.id.nav_favorites).setDrawerLayout(drawer).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_recipes, R.id.nav_create, R.id.nav_favorites).setDrawerLayout(drawer).build();
 
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

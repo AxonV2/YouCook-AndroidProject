@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youcook.R;
 import com.example.youcook.models.IRecipeModel;
+import com.example.youcook.models.RecipeModel;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class TagsRecyclerViewHolder extends RecyclerView.ViewHolder
         {{
             //Can't tell if this is good or bad
             //Lambda used to get instance of passed in ID;
-            IRecipeModel InstanceFromID = IRecipeModel.Full_Recipe_List.stream().filter(x -> x.getRecipeID().equals(RecipeID)).collect(Collectors.toList()).get(0);
+            IRecipeModel InstanceFromID = RecipeModel.Full_Recipe_List.stream().filter(x -> x.getRecipeID().equals(RecipeID)).collect(Collectors.toList()).get(0);
             //Add all tags from given recipe
             addAll(InstanceFromID.getTags());
         }};

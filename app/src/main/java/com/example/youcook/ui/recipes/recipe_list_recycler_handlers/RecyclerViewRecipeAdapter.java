@@ -8,36 +8,33 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.youcook.R;
 import com.example.youcook.models.IRecipeModel;
+import com.example.youcook.models.RecipeModel;
 
 import java.util.ArrayList;
 
 public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerViewHolder> implements Filterable
 {
-    //Example variables.
-    //This one will eventually point to our database collection AS A REFERENCE
-    private ArrayList<IRecipeModel> Recipes_Original = new ArrayList<>(IRecipeModel.Full_Recipe_List);
+    //Original list coming from IRecipeModel
+    private ArrayList<IRecipeModel> Recipes_Original;
 
     //Remember you do not want a reference to the list you want a fully new list.
     //This one will be filtered so items will be removed.
-    static private ArrayList<IRecipeModel> Recipes_Filtered = new ArrayList<>(IRecipeModel.Full_Recipe_List);
+    static private ArrayList<IRecipeModel> Recipes_Filtered;
 
     static public ArrayList<IRecipeModel> GetFilteredList(){ return Recipes_Filtered; }
 
 
-    public RecyclerViewRecipeAdapter() { }
-
-    //Constructor
-    public RecyclerViewRecipeAdapter(ArrayList<IRecipeModel> PartialRecipesList)
+    public RecyclerViewRecipeAdapter(ArrayList<IRecipeModel> List)
     {
-        //Not a new list this one will always point to the database list as a reference
-        Recipes_Original = PartialRecipesList;
-
-        //This works like C# does (Not a reference in this it's a new one)
-        Recipes_Filtered = new ArrayList<>(PartialRecipesList);
+        Recipes_Original = new ArrayList<>(List);
+        Recipes_Filtered = new ArrayList<>(List);
     }
 
 
@@ -53,6 +50,7 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
+        //Give view holder
         View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
         return new RecyclerViewHolder(view);
 
@@ -72,16 +70,49 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
         holder.getRecipeCook().setText("Cook " + Recipes_Filtered.get(position).getCookTime() + " Min(s)");
         holder.getRecipeDone().setText("Prep " + Recipes_Filtered.get(position).getDoneTime() + " Min(s)");
 
+        //Using current position against filtered list to get it's image URL
+        Glide.with(holder.itemView).load(Recipes_Filtered.get(position).getRecipeImageURL())
+                .override(1000,1000)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.monke)
+                .into(holder.getRecipeImage());
+
+
+
+        //Recycler variables for Tag Display
+
+        RecyclerView recyclerView = holder.itemView.findViewById(R.id.recipesListTagRecycler);
+
+        // Add the following lines to create RecyclerView
+
+        //Every item has fixed size?
+        //Used for optimization purposes, will probably have to be set to false.
+        recyclerView.setHasFixedSize(true);
+
+        //Layout and Adapter
+        //This time we set the recycler layout HORIZONTAL for tag display
+        recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        //Pass in tag size for item count and pass in ID for ViewHolder
+        ListTagsRecycleAdapter adapter = new ListTagsRecycleAdapter(Recipes_Filtered.get(position).getTags().size(), Recipes_Filtered.get(position).getRecipeID());
+        recyclerView.setAdapter(adapter);
+
+
     }
 
     @Override
     public int getItemCount()
     {
-        //Will be set to FILTERED list size instead.
+        //Will be set to FILTERED list size.
         //This is what specifies how many times onBindViewHolder will run.
         return Recipes_Filtered.size();
     }
 
+    //Filter call
+    @Override
+    public Filter getFilter() {
+        return filterInstance;
+    }
 
     //This Filter will bring up needed methods
     private Filter filterInstance = new Filter()
@@ -106,12 +137,22 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
                 {
                     //Once again make it lower case and check if it contains the filter.
                     //Right now we have filtering by Title and by Quick Description
-                    //Filter by tags?
 
-                    if (recipe.getRecipeTitle().toLowerCase().contains(passedInFilter) ||
-                            recipe.getRecipeQuickDescription().toLowerCase().contains(passedInFilter))
+                    if (recipe.getRecipeTitle().toLowerCase().contains(passedInFilter) || recipe.getRecipeQuickDescription().toLowerCase().contains(passedInFilter))
                         filteredList.add(recipe);
 
+
+                        //Filter by tags, else to avoid adding repeats, inside the for loop
+                        //we call the outer loop's recipe and check through each of its tags
+                    else {
+                        for (int i = 0; i < recipe.getTags().size(); i++)
+                        {
+                            if (recipe.getTags().get(i).toLowerCase().contains(passedInFilter)){
+                                filteredList.add(recipe);
+                            }
+
+                        }
+                    }
                 }
             }
 
@@ -143,9 +184,4 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
             //Partial_Recipes_Filtered.addAll((ArrayList)(results.values));
         }
     };
-
-    @Override
-    public Filter getFilter() {
-        return filterInstance;
-    }
 }
