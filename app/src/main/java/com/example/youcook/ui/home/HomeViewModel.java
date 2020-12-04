@@ -10,13 +10,11 @@ public class HomeViewModel extends ViewModel {
 
     private static MutableLiveData<String> mText = new MutableLiveData<String>()
     {{
-        setValue("Bom dia dickhead, ta na hora de comer né bola de merda?");
+        setValue("Bom dia, ta na hora de comer");
     }};
 
     public HomeViewModel()
     {
-        //Everytime we navigate here this will be set
-        //mText.setValue("Bom dia dickhead, ta na hora de comer né bola de merda?");
     }
 
     public LiveData<String> getText() {

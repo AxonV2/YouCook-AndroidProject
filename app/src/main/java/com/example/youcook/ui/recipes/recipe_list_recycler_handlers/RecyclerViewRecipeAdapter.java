@@ -1,6 +1,9 @@
 package com.example.youcook.ui.recipes.recipe_list_recycler_handlers;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.youcook.R;
+import com.example.youcook.context.BitmapHandler;
 import com.example.youcook.models.IRecipeModel;
-import com.example.youcook.models.RecipeModel;
+import com.example.youcook.ui.recipes.selected_recipe_recycler_handlers.ListTagsRecycleAdapter;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 
 public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerViewHolder> implements Filterable
 {
@@ -71,11 +77,29 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
         holder.getRecipeDone().setText("Prep " + Recipes_Filtered.get(position).getDoneTime() + " Min(s)");
 
         //Using current position against filtered list to get it's image URL
-        Glide.with(holder.itemView).load(Recipes_Filtered.get(position).getRecipeImageURL())
-                .override(1000,1000)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.monke)
-                .into(holder.getRecipeImage());
+
+        if (Recipes_Filtered.get(position).getRecipeID() == 4)
+        {
+            BitmapHandler bt = new BitmapHandler();
+            Bitmap image = bt.StringToBitMap(Recipes_Filtered.get(position).getRecipeImageURL());
+            Log.d("Tag", "Testing: " + image + Recipes_Filtered.get(position).getRecipeImageURL());
+            Glide.with(holder.itemView).load(image)
+                    .apply(new RequestOptions().override(1000, 600))
+                    .centerCrop()
+                    //        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    //       .placeholder(R.drawable.monke)
+                    .into(holder.getRecipeImage());
+        }
+        else
+        {
+            Glide.with(holder.itemView).load(Recipes_Filtered.get(position).getRecipeImageURL())
+                    .apply(new RequestOptions().override(1000, 600))
+                    .centerCrop()
+                    //        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    //       .placeholder(R.drawable.monke)
+                    .into(holder.getRecipeImage());
+        }
+
 
 
 

@@ -9,6 +9,7 @@
     android:backgroundTint="#1DFFFFFF">
 
     <FrameLayout
+        android:id="@+id/tagFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary">
@@ -18,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="5dp"
-            android:text="TextView" />
+            android:text=""
+            android:textStyle="bold" />
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

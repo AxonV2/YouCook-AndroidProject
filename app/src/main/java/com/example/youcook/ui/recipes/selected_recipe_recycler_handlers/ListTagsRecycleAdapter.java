@@ -1,4 +1,4 @@
-package com.example.youcook.ui.recipes.recipe_list_recycler_handlers;
+package com.example.youcook.ui.recipes.selected_recipe_recycler_handlers;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;

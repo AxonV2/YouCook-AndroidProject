@@ -58,7 +58,7 @@ public class RecipesViewModel extends ViewModel {
 
 
     public static void UpdateFavoritesButton()
-        {
+    {
         //Check if in favorites
         //TODO CHANGE TO LOGGED IN USER
         String CurrentUserEmail = mutableRecipeAuthorEmail.getValue();
@@ -90,11 +90,8 @@ public class RecipesViewModel extends ViewModel {
     public static LiveData<String> getRecipeTitle() { return mutableRecipeTitle; }
     public static LiveData<String> getRecipeQuickDescription() { return mutableRecipeQuickDescription; }
     public static LiveData<String> getRecipeLongDescription() { return mutableRecipeLongDescription; }
-    public static LiveData<Integer> getRecipePrep() { return mutableRecipePrep; }
     public static String getRecipePrepDisplay() { return "Prep " + mutableRecipePrep.getValue() + " Min(s)"; }
-    public static LiveData<Integer> getRecipeCook() { return mutableRecipeCook; }
     public static String getRecipeCookDisplay() { return "Cook " + mutableRecipeCook.getValue() + " Min(s)"; }
-    public static LiveData<Integer> getRecipeDone() { return mutableRecipeDone; }
     public static String getRecipeDoneDisplay() { return "Done " + mutableRecipeDone.getValue() + " Min(s)"; }
     public static LiveData<String> getRecipeAuthorName() { return mutableRecipeAuthorName; }
     public static LiveData<String> getRecipeAuthorEmail() { return mutableRecipeAuthorEmail; }

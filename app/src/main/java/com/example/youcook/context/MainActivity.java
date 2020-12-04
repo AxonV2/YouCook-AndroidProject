@@ -1,11 +1,16 @@
 package com.example.youcook.context;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,15 +20,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.youcook.R;
 import com.example.youcook.controller.SQLiteDataMain;
 import com.example.youcook.controller.SQLiteDataHelper;
-import com.example.youcook.models.IRecipeModel;
-import com.example.youcook.models.UsersModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.youcook.ui.create.CreateViewModel;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     static public MenuItem searchItem;
     //Database Instance
     static public SQLiteDataMain YouCookDatabase;
+
+    //Image to be set by user for create recipe fragment
+    static public ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -84,5 +92,50 @@ public class MainActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+    }
+
+
+    //RECIPE IMAGE INSERT
+    public static final int GET_FROM_GALLERY = 0;
+
+    public void addImage(View view)
+    {
+        //Send to gallery
+        startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+        imageView = view.findViewById(R.id.createRecipeImage);
+    }
+
+    //After getting image from gallery
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //Detects request codes
+        //If it got the picture normally
+        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK)
+        {
+            //Get it's data
+            Uri selectedImage = data.getData();
+
+            //Set bitmap
+            Bitmap bitmap = null;
+            try {
+
+                //Give bitmap data
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                CreateViewModel.setCreatedRecipeImage(bitmap);
+                //Log.d("Tag", "onClick：" + bitmap);
+
+                //Load bitmap into create imageview
+                Glide.with(MainActivity.this).load(bitmap).apply(new RequestOptions().override(1000, 600)).centerCrop().into(imageView);
+                //imageView.setImageBitmap(bitmap);
+
+            } catch (IOException e)
+            {
+                Log.d("Tag", "ImageRetrieval Exception：" + e);
+                e.printStackTrace();
+            }
+        }
     }
 }

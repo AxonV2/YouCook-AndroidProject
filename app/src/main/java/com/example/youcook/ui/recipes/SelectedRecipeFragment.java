@@ -23,7 +23,7 @@ import com.example.youcook.controller.SQLiteDataHelper;
 import com.example.youcook.databinding.FragmentSelectedRecipeBinding;
 import com.example.youcook.models.IRecipeModel;
 import com.example.youcook.models.RecipeModel;
-import com.example.youcook.ui.recipes.selected_recipe_recycler_handlers.TagsRecyclerViewAdapter;
+import com.example.youcook.ui.recipes.selected_recipe_recycler_handlers.ListTagsRecycleAdapter;
 
 import java.util.stream.Collectors;
 
@@ -52,11 +52,9 @@ public class SelectedRecipeFragment extends Fragment {
         //Layout and Adapter
         //This time we set the recycler layout HORIZONTAL for tag display
         recyclerView.setLayoutManager(new LinearLayoutManager(returningView.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter();
+        //Will always be set so it wont throw an exception
+        ListTagsRecycleAdapter adapter = new ListTagsRecycleAdapter(RecipesViewModel.getTagListSize(), RecipesViewModel.getSelectedRecipeItemID().getValue());
         recyclerView.setAdapter(adapter);
-
-
-        //Todo fix
 
         //Recipe Image
         ImageView recipeImage = returningView.findViewById(R.id.FullRecipeImage);
@@ -100,11 +98,11 @@ public class SelectedRecipeFragment extends Fragment {
 
                 if (res != 1)
                 {
-                    Toast.makeText(returningView.getContext(), "You have added " + RecipesViewModel.getRecipeTitle().getValue() + " to your favorites!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(returningView.getContext(), "You have added " + RecipesViewModel.getRecipeTitle().getValue() + " to your favorites!", Toast.LENGTH_SHORT).show();
                     IRecipeModel.Favorites_Recipe_List.add(recipe);
                 }
                 else{
-                    Toast.makeText(returningView.getContext(), "You have removed " + RecipesViewModel.getRecipeTitle().getValue() + " from your favorites", Toast.LENGTH_LONG).show();
+                    Toast.makeText(returningView.getContext(), "You have removed " + RecipesViewModel.getRecipeTitle().getValue() + " from your favorites", Toast.LENGTH_SHORT).show();
                     IRecipeModel.Favorites_Recipe_List.remove(recipe);
                 }
                 RecipesViewModel.UpdateFavoritesButton();
