@@ -20,9 +20,8 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder
     // necessary UI information about one item in RecyclerView.
     // In this example, itemView is the ConstraintLayout.
 
-    private TextView Title, QuickDescription, RecipePrep, RecipeCook, RecipeDone;
-    private ImageView RecipeImage;
-
+    private final TextView Title, QuickDescription, RecipePrep, RecipeCook, RecipeDone;
+    private final ImageView RecipeImage;
 
     public TextView getTitle(){
         return Title;
@@ -42,7 +41,6 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder
     public ImageView getRecipeImage(){
         return RecipeImage;
     }
-
 
     //HERE IS WHERE WE SET UP EVERYTHING RELATED TO DISPLAYING RECIPES.
     //VALUE ASSIGNMENT IS DONE INSIDE ADAPTER
@@ -74,7 +72,7 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder
                 //Trying to navigate controllers not fragments
                 //The (v) passed in findNavController is the View from overwritten onClick
                 //Custom navigation anim made in navigation -> mobile_navigation
-                //Don't like this but it works
+                // note - hike; Don't like this but it works
                 try {
                     Navigation.findNavController(v).navigate(R.id.action_nav_to_selected_recipe);
                 }

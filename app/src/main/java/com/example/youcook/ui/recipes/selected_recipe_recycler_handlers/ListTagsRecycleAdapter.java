@@ -1,4 +1,4 @@
-package com.example.youcook.ui.recipes.recipe_list_recycler_handlers;
+package com.example.youcook.ui.recipes.selected_recipe_recycler_handlers;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -11,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.youcook.R;
 import com.example.youcook.ui.recipes.selected_recipe_recycler_handlers.TagsRecyclerViewHolder;
 
-public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerViewHolder>{
-
+public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerViewHolder> {
     private Integer passedInTagSize;
     private Integer passedInID;
 
@@ -30,7 +29,6 @@ public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerVie
         return R.layout.recipe_item_recycler_layout;
     }
 
-
     @NonNull
     @Override
     public TagsRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
@@ -40,7 +38,6 @@ public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerVie
         //Need ViewModel for selected RecipeID
         //Passing in specific ID.
         return new TagsRecyclerViewHolder(view, passedInID);
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -48,10 +45,8 @@ public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerVie
     public void onBindViewHolder(@NonNull TagsRecyclerViewHolder holder, int position)
     {
         //THIS IS WHERE WE WILL ASSIGN VALUES
-
         //Call variables held in HolderView and assign them.
         holder.getTagDisplay().setText(TagsRecyclerViewHolder.getRecipeTags().get(position));
-
     }
 
     @Override
@@ -60,5 +55,4 @@ public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerVie
     {
         return passedInTagSize;
     }
-
 }

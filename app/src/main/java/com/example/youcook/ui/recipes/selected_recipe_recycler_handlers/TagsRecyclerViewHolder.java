@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 public class TagsRecyclerViewHolder extends RecyclerView.ViewHolder
 {
-
     private static ArrayList<String> RecipeTags;
     private TextView TagDisplay;
 

@@ -45,11 +45,9 @@ public class RecipesFavorites extends Fragment {
         //Layout and Adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(returningView.getContext()));
 
-
         //Send FAVORITES list through adapter
         RecyclerViewRecipeAdapter Adapter = new RecyclerViewRecipeAdapter(IRecipeModel.Favorites_Recipe_List);
         recyclerView.setAdapter(Adapter);
-
 
         //Static menu item set in MainActivity
         SearchView searchView = (SearchView) MainActivity.searchItem.getActionView();
@@ -72,19 +70,5 @@ public class RecipesFavorites extends Fragment {
         });
 
         return returningView;
-
-        /* OBSERVER
-        recipesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>()
-        {
-            @Override
-            public void onChanged(@Nullable String s)
-            {
-                textView.setText(s);
-            }
-        });
-
-
-         */
-
     }
 }

@@ -28,7 +28,6 @@ public class SQLiteDataMain extends SQLiteOpenHelper
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-
     //Instance of the database
     private static SQLiteDataMain DB_instance;
 
@@ -40,7 +39,6 @@ public class SQLiteDataMain extends SQLiteOpenHelper
 
         return DB_instance;
     }
-
 
     //This method is automatically called when DB requests or inputs new data.
     @Override

@@ -38,7 +38,6 @@ public class RecipesFragment extends Fragment {
         FullRecipeListAdapter = new RecyclerViewRecipeAdapter(IRecipeModel.Full_Recipe_List);
         recyclerView.setAdapter(FullRecipeListAdapter);
 
-
         //Static menu item set in MainActivity
         SearchView searchView = (SearchView) MainActivity.searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()

@@ -24,7 +24,6 @@ public class UsersModel implements IUsersModel
     public void setPictureURL(String val) { pictureURL = val; }
     //endregion
 
-
     public UsersModel()
     {
     }
@@ -35,8 +34,4 @@ public class UsersModel implements IUsersModel
         this.userName = UserNameValue;
         this.pictureURL = PictureURLValue;
     }
-
-
-
-
 }

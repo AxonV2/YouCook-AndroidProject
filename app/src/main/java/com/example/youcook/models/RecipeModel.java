@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 public class RecipeModel implements IRecipeModel
 {
-
     private Integer recipeID = 0;
-    private IUsersModel recipeAuthor = new UsersModel();
+    private IUsersModel recipeAuthor;
     private String recipeTitle;
     private String recipeImageURL;
     private String recipeLongDescription;
@@ -18,6 +17,7 @@ public class RecipeModel implements IRecipeModel
     private Boolean isFavorite = false;
 
     //region GettersAndSetters
+
     //Getters
     @Override
     public Integer getRecipeID() { return recipeID; }
@@ -80,6 +80,4 @@ public class RecipeModel implements IRecipeModel
         this.doneTime = DoneTime;
         this.tags.addAll(Tags);
     }
-
-
 }

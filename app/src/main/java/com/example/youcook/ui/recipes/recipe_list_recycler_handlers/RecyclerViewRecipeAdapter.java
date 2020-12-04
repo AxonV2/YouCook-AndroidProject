@@ -1,9 +1,13 @@
 package com.example.youcook.ui.recipes.recipe_list_recycler_handlers;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.Filter;
 import android.widget.Filterable;
 
@@ -13,11 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.youcook.R;
+import com.example.youcook.context.BitmapHandler;
 import com.example.youcook.models.IRecipeModel;
-import com.example.youcook.models.RecipeModel;
+import com.example.youcook.ui.recipes.selected_recipe_recycler_handlers.ListTagsRecycleAdapter;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 
 public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerViewHolder> implements Filterable
 {
@@ -71,20 +78,28 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
         holder.getRecipeDone().setText("Prep " + Recipes_Filtered.get(position).getDoneTime() + " Min(s)");
 
         //Using current position against filtered list to get it's image URL
-        Glide.with(holder.itemView).load(Recipes_Filtered.get(position).getRecipeImageURL())
-                .override(1000,1000)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.monke)
-                .into(holder.getRecipeImage());
 
-
+        if (!URLUtil.isValidUrl(Recipes_Filtered.get(position).getRecipeImageURL()))
+        {
+            Bitmap image = BitmapHandler.StringToBitMap(Recipes_Filtered.get(position).getRecipeImageURL());
+            //Log.d("Tag", "Testing: " + image + Recipes_Filtered.get(position).getRecipeImageURL());
+            Glide.with(holder.itemView).load(image)
+                    .apply(new RequestOptions().override(1000, 600))
+                    .centerCrop()
+                    .into(holder.getRecipeImage());
+        }
+        else
+        {
+            Glide.with(holder.itemView).load(Recipes_Filtered.get(position).getRecipeImageURL())
+                    .apply(new RequestOptions().override(1000, 600))
+                    .centerCrop()
+                    .into(holder.getRecipeImage());
+        }
 
         //Recycler variables for Tag Display
-
         RecyclerView recyclerView = holder.itemView.findViewById(R.id.recipesListTagRecycler);
 
-        // Add the following lines to create RecyclerView
-
+        //Add the following lines to create RecyclerView
         //Every item has fixed size?
         //Used for optimization purposes, will probably have to be set to false.
         recyclerView.setHasFixedSize(true);
@@ -96,8 +111,6 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
         //Pass in tag size for item count and pass in ID for ViewHolder
         ListTagsRecycleAdapter adapter = new ListTagsRecycleAdapter(Recipes_Filtered.get(position).getTags().size(), Recipes_Filtered.get(position).getRecipeID());
         recyclerView.setAdapter(adapter);
-
-
     }
 
     @Override
@@ -137,20 +150,15 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
                 {
                     //Once again make it lower case and check if it contains the filter.
                     //Right now we have filtering by Title and by Quick Description
-
                     if (recipe.getRecipeTitle().toLowerCase().contains(passedInFilter) || recipe.getRecipeQuickDescription().toLowerCase().contains(passedInFilter))
                         filteredList.add(recipe);
-
 
                         //Filter by tags, else to avoid adding repeats, inside the for loop
                         //we call the outer loop's recipe and check through each of its tags
                     else {
-                        for (int i = 0; i < recipe.getTags().size(); i++)
-                        {
-                            if (recipe.getTags().get(i).toLowerCase().contains(passedInFilter)){
+                        for (int i = 0; i < recipe.getTags().size(); i++) {
+                            if (recipe.getTags().get(i).toLowerCase().contains(passedInFilter))
                                 filteredList.add(recipe);
-                            }
-
                         }
                     }
                 }
@@ -171,17 +179,9 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
             //Assign the list we made in the last method to our filtered one.
             Recipes_Filtered = new ArrayList<IRecipeModel>((ArrayList)results.values);
 
-
             // when called, looks at what items are displayed on the screen at the moment of its call
             // (more precisely which row indexes ) and calls getView() with those positions.
             notifyDataSetChanged();
-
-
-            //IF LIST EMPTY CALL RECIPESVIEWMODEL LIVE TEXT AND CHANGE IT???
-
-
-            //Partial_Recipes_Filtered.clear();
-            //Partial_Recipes_Filtered.addAll((ArrayList)(results.values));
         }
     };
 }

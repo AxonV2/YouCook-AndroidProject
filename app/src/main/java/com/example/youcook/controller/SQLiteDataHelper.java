@@ -46,32 +46,21 @@ public class SQLiteDataHelper
             cv.put("UserEmail", AuthorEmail );
             cv.put("RecipeID", RecipeID);
             WritableDB.insert(SQLiteDataMain.USER_FAVORITES_TABLE, null, cv);
+
             FavoritesResult.close();
+
             return 0;
         }
         else {
             //If it already exists remove it
             String removeQuery = "DELETE FROM " + SQLiteDataMain.USER_FAVORITES_TABLE + " WHERE UserEmail = ? AND RecipeID = ?";
             WritableDB.execSQL(removeQuery,new String[] { AuthorEmail, String.valueOf(RecipeID)});
+
             FavoritesResult.close();
+
             return 1;
         }
     }
-
-    public static Boolean InFavorites(String AuthorEmail, Integer RecipeID)
-    {
-        String FavoritesQuery = "SELECT * FROM " + SQLiteDataMain.USER_FAVORITES_TABLE + " WHERE UserEmail = ? AND RecipeID = ?";
-        Cursor FavoritesResult = ReadableDB.rawQuery(FavoritesQuery,new String[] { AuthorEmail, String.valueOf(RecipeID)});
-
-        //Assign value here so we can close cursor before returning
-        Boolean result = FavoritesResult.moveToFirst();
-
-        //If first NOT FOUND -> not in favorites
-        //If first FOUND -> in favorites
-        FavoritesResult.close();
-        return result;
-    }
-
 
 
 
@@ -87,30 +76,82 @@ public class SQLiteDataHelper
         //Add Tags
         ArrayList<String> Tags = new ArrayList<String>(){
             {
-               add("Healthy"); add("Low Carb"); add("High Protein"); add("Low Fat"); add("Vegetarian"); add("Meaty"); add("Soy"); add("Easily Made");
-               add("Quick"); add("Cringe"); add("Gay"); add("Soup"); add("The Hike"); add("Dessert"); add("Hangover Food"); add("Cold");
+                add("Healthy"); add("Low Carb"); add("High Protein"); add("Low Fat"); add("Vegetarian"); add("Meaty"); add("Soy"); add("Easily Made");
+                add("Quick"); add("Soup"); add("Dessert"); add("Hangover Food"); add("Cold");
             } };
 
         for (String Tag : Tags) { AddTagsToDB(Tag); }
 
 
         //Add Recipes and connections
-        AddRecipe(ClassInstanceFactory.RecipeFactory(1, GetUser("test1@gmail.com") ,"Soup", "https://i.imgur.com/exel7MP.jpg", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        AddRecipe(ClassInstanceFactory.RecipeFactory(1, GetUser("test1@gmail.com") ,"Soup", "https://i.imgur.com/DeGj9h1.jpg", "STEP 1\n" +
+                        "Heat a large saucepan and dry-fry 2 tsp cumin seeds and a pinch of chilli flakes for 1 min, or until they start to jump around the pan and release their aromas.\n" +
+                        "\n" +
+                        "STEP 2\n" +
+                        "Scoop out about half with a spoon and set aside. Add 2 tbsp olive oil, 600g coarsely grated carrots, 140g split red lentils, 1l hot vegetable stock and 125ml milk to the pan and bring to the boil.\n" +
+                        "\n" +
+                        "STEP 3\n" +
+                        "Simmer for 15 mins until the lentils have swollen and softened.\n" +
+                        "\n" +
+                        "STEP 4\n" +
+                        "Whizz the soup with a stick blender or in a food processor until smooth (or leave it chunky if you prefer).\n" +
+                        "\n" +
+                        "STEP 5\n" +
+                        "Season to taste and finish with a dollop of plain yogurt and a sprinkling of the reserved toasted spices. Serve with warmed naan breads.",
                 "Healthy Vegetable Soup!", 25, 50, 25+50,
-                new ArrayList<String>(){{ add("Healthy"); add("Soup"); add("The Hike"); add("Gay");}}));
+                new ArrayList<String>(){{ add("Healthy"); add("Soup"); }}));
 
-        AddRecipe(ClassInstanceFactory.RecipeFactory(2,GetUser("test2@gmail.com") ,"The Hike", "https://media.discordapp.net/attachments/753353251319185410/783874219909185596/20190913_234837-1.jpg", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        AddRecipe(ClassInstanceFactory.RecipeFactory(2,GetUser("test2@gmail.com") ,"The Hike", "https://images.immediate.co.uk/production/volatile/sites/22/2018/09/JI_270217_HikingRecipes_159-9074ec1.jpg?quality=90&resize=768,574", "Preheat the oven to 180°C / 350°F. Lightly grease a large rectangular baking dish (approximately 9\" x 13\" / 23 x 33 cm) and line with a piece of parchment paper (with overhang so the bars are easier to remove.)\n" +
+                        "\nIn a large bowl, mash the banana until smooth. Stir in the vanilla.\n" +
+                        "\nAdd the remaining ingredients to the banana mixture and stir until fully combined. You'll end up with a heavy thick mixture.\n" +
+                        "\nSpoon the mixture into the prepared dish. With lightly wet hands, smooth out until even and uniform. Press down on the dough until compacted.\n" +
+                        "\nBake for 22 to 26 minutes, until firm and lightly golden along the edges.\n" +
+                        "\nPlace the dish on a cooling rack for 10 minutes, then carefully slide a knife to loosen the ends and gently lift out. Place the slab on a cooling rack until completely cool.\n" +
+                        "\nOnce cool, slice into bars. I like to use a pizza slicer as it easily cuts through the dried fruit and nuts. A bread knife also works well. Leftovers can be wrapped up and stored in the fridge for a week, or stored in the freezer for 4 to 6 weeks.",
                 "Healthy Vegetable Soup!", 2, 10, 2+10,
-                new ArrayList<String>(){{ add("Cringe"); add("Meaty"); add("The Hike"); add("Gay");}}));
-        AddRecipe(ClassInstanceFactory.RecipeFactory(3,GetUser("test3@gmail.com") ,"Tall Slim Bastard", "https://media.discordapp.net/attachments/631207789020184577/782557872147398676/cock.png", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                new ArrayList<String>(){{ add("Low Carb"); add("Healthy"); add("Soup"); add("Quick"); add("Cold"); }}));
+        AddRecipe(ClassInstanceFactory.RecipeFactory(3,GetUser("test3@gmail.com") ,"Tall Slim Potatoes", "https://www.eatwell101.com/wp-content/uploads/2018/05/Garlic-Butter-Chicken-and-Potatoes-Skillet.jpg", "STEP 1\n" +
+                        "Put a roasting tin in the oven (one big enough to take the potatoes in a single layer) and heat oven to 200C/fan 180C/gas 6.\n" +
+                        "\n" +
+                        "STEP 2\n" +
+                        "Peel 1kg potatoes and cut each into 4 even-sized pieces if they are medium size, 2-3 if smaller (5cm pieces).\n" +
+                        "\n" +
+                        "STEP 3\n" +
+                        "Drop the potatoes into a large pan and pour in enough water to barely cover them.\n" +
+                        "\n" +
+                        "STEP 4\n" +
+                        "Add salt, then wait for the water to boil. As soon as the water reaches a full rolling boil, lower the heat, put your timer on and simmer the potatoes uncovered, reasonably vigorously, for 2 mins.\n" +
+                        "\n" +
+                        "STEP 5\n" +
+                        "Meanwhile, put 100g duck or goose fat or 100ml olive oil into the hot roasting tin and heat it in the oven for a few mins, so it’s really hot.\n" +
+                        "\n" +
+                        "STEP 6\n" +
+                        "Drain the potatoes in a colander then shake the colander back and forth a few times to fluff up the outsides.\n" +
+                        "\n" +
+                        "STEP 7\n" +
+                        "Sprinkle with 2 tsp flour and give another shake or two so they are evenly and thinly coated.\n" +
+                        "\n" +
+                        "STEP 8\n" +
+                        "Carefully put the potatoes into the hot fat – they will sizzle as they go in – then turn and roll them around so they are coated all over.\n" +
+                        "\n" +
+                        "STEP 9\n" +
+                        "Spread them in a single layer making sure they have plenty of room.\n" +
+                        "\n" +
+                        "STEP 10\n" +
+                        "Roast the potatoes for 15 mins, then take them out of the oven and turn them over.\n" +
+                        "\n" +
+                        "STEP 11\n" +
+                        "Roast for another 15 mins and turn them over again. Put them back in the oven for another 10-20 mins, or however long it takes to get them really golden and crisp. The colouring will be uneven, which is what you want.\n" +
+                        "\n" +
+                        "STEP 12\n" +
+                        "Scatter with Maldon salt and serve straight away.",
                 "HvH Prime Minister (Self-Proclaimed)", 0, 150, 150,
                 new ArrayList<String>(){{ add("Vegetarian"); add("Healthy"); add("Easily Made"); add("High Protein"); add("Soy"); add("Low Fat");}}));
 
         //endregion
 
         //Finally populate list to use.
-        IRecipeModel.Full_Recipe_List.addAll(getRecipesList());
-
+        IRecipeModel.Full_Recipe_List.addAll(GetRecipesList());
     }
 
 
@@ -118,7 +159,7 @@ public class SQLiteDataHelper
     {
         ContentValues cv = new ContentValues();
 
-        //Check if value already exists (Email)
+        //Check if value already exists (tag)
         String TagCheck = "SELECT TagText FROM " + SQLiteDataMain.TAGS_TABLE + " WHERE TagText = ?";
 
         //Query Result with Email parameter
@@ -158,7 +199,7 @@ public class SQLiteDataHelper
             //Insert into Database.
             //insert(Table Name, nullColumnHack, ContentValues)
             //Writable Database locks database so no other processes can update.
-            long OperationCheck = WritableDB.insert(SQLiteDataMain.USERS_TABLE, null, cv);
+            WritableDB.insert(SQLiteDataMain.USERS_TABLE, null, cv);
 
             //region NullColumnHack Description
         /*
@@ -199,7 +240,6 @@ public class SQLiteDataHelper
             cv.put("CookTime", Recipe.getCookTime());
             cv.put("DoneTime", Recipe.getDoneTime());
 
-
             WritableDB.insert(SQLiteDataMain.RECIPES_TABLE, null, cv);
             cv.clear();
 
@@ -209,6 +249,7 @@ public class SQLiteDataHelper
                 cv.put("RecipeID", Recipe.getRecipeID());
                 cv.put("TagID", GetTagID(Tag));
                 WritableDB.insert(SQLiteDataMain.RECIPE_TAGS_TABLE, null, cv);
+
                 cv.clear();
             }
         }
@@ -216,14 +257,13 @@ public class SQLiteDataHelper
         RecipeResults.close();
     }
 
-    public static ArrayList<IRecipeModel> getRecipesList()
+    public static ArrayList<IRecipeModel> GetRecipesList()
     {
         //List of recipes to return
         ArrayList<IRecipeModel> returnList = new ArrayList<>();
 
         //SQL Query
         String query = "SELECT * FROM " + SQLiteDataMain.RECIPES_TABLE;
-
 
         //Readable Database not Writable
         //raw Query returns Cursor (an array of results).
@@ -248,8 +288,6 @@ public class SQLiteDataHelper
                 IRecipeModel recipeModel = ClassInstanceFactory.RecipeFactory(recipeID, GetUser(recipeAuthorEmail),
                         recipeTitle, recipeImage, recipeLongDescription, recipeQuickDescription,prepTime,cookTime,doneTime, GetTags(recipeID));
 
-
-                //TODO CHECK IF CURRENT USER FAVORITES
                 if (InFavorites(recipeModel.getRecipeAuthor().getUserEmail(), recipeModel.getRecipeID()))
                 {
                     recipeModel.setFavorite(true);
@@ -292,12 +330,15 @@ public class SQLiteDataHelper
 
                 //Parameter passed TagID
                 tagResult = ReadableDB.rawQuery(tagQuery,new String[] {String.valueOf(IDResults.getInt(0))});
-                    if (tagResult.moveToFirst())
-                    {
-                        //Get text and add it to return list
-                        recipeTags.add(tagResult.getString(0));
-                    }
+
+                if (tagResult.moveToFirst())
+                {
+                    //Get text and add it to return list
+                    recipeTags.add(tagResult.getString(0));
+                }
+
             } while (IDResults.moveToNext());
+
             tagResult.close();
         }
 
@@ -307,12 +348,24 @@ public class SQLiteDataHelper
         return recipeTags;
     }
 
-    public static void DeleteRecipeTest(Integer RecipeID)
+    public static ArrayList<String> GetAvailableTags()
     {
-        String query = "DELETE FROM " + SQLiteDataMain.RECIPES_TABLE + " WHERE ID = " + RecipeID;
-        WritableDB.execSQL(query,null);
-    }
+        ArrayList<String> allTags = new ArrayList<>();
+        String tagQuery = "SELECT * FROM " + SQLiteDataMain.TAGS_TABLE;
+        Cursor results = ReadableDB.rawQuery(tagQuery,null);
 
+        //If results are found
+        if (results.moveToFirst())
+        {
+            do {
+                allTags.add(results.getString(1));
+            } while (results.moveToNext());
+        }
+
+        results.close();
+
+        return allTags;
+    }
 
     private static Integer GetTagID(String Tag)
     {
@@ -327,7 +380,6 @@ public class SQLiteDataHelper
 
     }
 
-
     private static IUsersModel GetUser(String Email) {
         //Check for Email
         String UserCheck = "SELECT * FROM " + SQLiteDataMain.USERS_TABLE + " WHERE Email = ?";
@@ -341,9 +393,27 @@ public class SQLiteDataHelper
             String UserImageURL = UserResults.getString(2);
 
             UserResults.close();
+
             return ClassInstanceFactory.UsersFactory(UserEmail, UserName, UserImageURL);
         }
+
         UserResults.close();
+
         return ClassInstanceFactory.UsersFactory("", "", "");
+    }
+
+    public static Boolean InFavorites(String AuthorEmail, Integer RecipeID)
+    {
+        String FavoritesQuery = "SELECT * FROM " + SQLiteDataMain.USER_FAVORITES_TABLE + " WHERE UserEmail = ? AND RecipeID = ?";
+        Cursor FavoritesResult = ReadableDB.rawQuery(FavoritesQuery,new String[] { AuthorEmail, String.valueOf(RecipeID)});
+
+        //Assign value here so we can close cursor before returning
+        Boolean result = FavoritesResult.moveToFirst();
+
+        //If first NOT FOUND -> not in favorites
+        //If first FOUND -> in favorites
+        FavoritesResult.close();
+
+        return result;
     }
 }

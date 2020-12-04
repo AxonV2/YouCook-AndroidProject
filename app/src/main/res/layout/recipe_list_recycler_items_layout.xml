@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="435dp">
+    android:layout_height="450dp">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -34,7 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:src="@drawable/cock" />
+            android:src="@drawable/cook"
+            android:contentDescription="@string/recipeimage" />
 
         <TextView
             android:id="@+id/recipesListQuickDesc"
@@ -43,12 +44,13 @@
             android:clickable="false"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="TextView" />
+            android:text=""
+            android:textSize="18sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recipesListTagRecycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="39dp"
             tools:itemCount="1" />
 
         <LinearLayout
@@ -61,14 +63,16 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="37dp"
-                app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
+                app:srcCompat="@android:drawable/ic_lock_idle_alarm"
+                android:contentDescription="@string/author" />
+
 
             <TextView
                 android:id="@+id/recipesListPrepText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Prep X Min"
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="24sp" />
 
@@ -77,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Cook X Min"
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="24sp" />
 
@@ -86,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Done X Min"
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="24sp" />
         </LinearLayout>
