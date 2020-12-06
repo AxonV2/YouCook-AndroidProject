@@ -4,21 +4,19 @@ YouCook is a simple recipe app made in Android Studio using Java and SQLite, whe
 
 List of to do's:
 
-        Login System (Google API)
+    Login System (Google API)
         
-        Comment System
+    Comment System
         
-        Add in online database
+    Add in online database
         
-        Optimize performance
+    Optimize performance
         
-        Kotlin Build
+    Kotlin Build
 
 ### Creators
-> [AxonV2](https://github.com/AxonV2)
-
-> [RazBot](https://github.com/RazBot21)
-
+> [AxonV2](https://github.com/AxonV2) |
+> [RazBot](https://github.com/RazBot21) |
 > [TheHike](https://github.com/TheHike)
 
 
