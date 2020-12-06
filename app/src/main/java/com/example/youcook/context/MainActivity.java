@@ -23,13 +23,12 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.youcook.R;
-import com.example.youcook.controller.SQLiteDataMain;
 import com.example.youcook.controller.SQLiteDataHelper;
+import com.example.youcook.controller.SQLiteDataMain;
 import com.example.youcook.ui.create.CreateViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 

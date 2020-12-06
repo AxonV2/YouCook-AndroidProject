@@ -1,31 +1,20 @@
 package com.example.youcook.ui.recipes;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youcook.R;
 import com.example.youcook.context.MainActivity;
 import com.example.youcook.models.IRecipeModel;
-import com.example.youcook.models.RecipeModel;
-import com.example.youcook.ui.create.CreateViewModel;
-import com.example.youcook.ui.recipes.RecipesViewModel;
 import com.example.youcook.ui.recipes.recipe_list_recycler_handlers.RecyclerViewRecipeAdapter;
-
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 
 public class RecipesFavorites extends Fragment {

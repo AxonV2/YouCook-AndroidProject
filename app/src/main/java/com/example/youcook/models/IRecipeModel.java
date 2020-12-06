@@ -1,9 +1,5 @@
 package com.example.youcook.models;
 
-import com.example.youcook.context.MainActivity;
-import com.example.youcook.controller.SQLiteDataHelper;
-import com.example.youcook.controller.SQLiteDataMain;
-
 import java.util.ArrayList;
 
 public interface IRecipeModel

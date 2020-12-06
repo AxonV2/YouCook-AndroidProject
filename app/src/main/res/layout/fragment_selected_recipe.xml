@@ -134,9 +134,10 @@
                     android:id="@+id/FullRecipeAuthorImage"
                     android:layout_width="150dp"
                     android:layout_height="100dp"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_weight="1"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@tools:sample/avatars"
+                    android:contentDescription="@string/user_image" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -166,7 +167,7 @@
             <Button
                 android:id="@+id/FavoriteButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/colorPrimary"
                 android:onClick="AddToFavorites"

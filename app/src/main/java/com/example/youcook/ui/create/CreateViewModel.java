@@ -2,9 +2,7 @@ package com.example.youcook.ui.create;
 
 import android.graphics.Bitmap;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
@@ -16,14 +14,10 @@ import com.example.youcook.controller.SQLiteDataHelper;
 import com.example.youcook.models.ClassInstanceFactory;
 import com.example.youcook.models.IRecipeModel;
 import com.example.youcook.models.IUsersModel;
-import com.example.youcook.models.RecipeModel;
-import com.example.youcook.models.UsersModel;
 import com.example.youcook.ui.create.created_recipe_tag_recycler.CreateTagRecyclerViewHolder;
 import com.example.youcook.ui.recipes.RecipesViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class CreateViewModel extends ViewModel {
 

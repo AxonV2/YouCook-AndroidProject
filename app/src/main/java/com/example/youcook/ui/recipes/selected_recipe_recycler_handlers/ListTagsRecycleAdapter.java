@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youcook.R;
-import com.example.youcook.ui.recipes.selected_recipe_recycler_handlers.TagsRecyclerViewHolder;
 
 public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerViewHolder> {
     private Integer passedInTagSize;

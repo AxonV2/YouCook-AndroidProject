@@ -145,7 +145,7 @@ public class SQLiteDataHelper
                         "\n" +
                         "STEP 12\n" +
                         "Scatter with Maldon salt and serve straight away.",
-                "HvH Prime Minister (Self-Proclaimed)", 0, 150, 150,
+                "Simple potato recipe", 0, 150, 150,
                 new ArrayList<String>(){{ add("Vegetarian"); add("Healthy"); add("Easily Made"); add("High Protein"); add("Soy"); add("Low Fat");}}));
 
         //endregion

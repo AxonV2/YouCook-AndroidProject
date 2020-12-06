@@ -34,4 +34,6 @@
     <string name="create_recipe">Create Recipe</string>
     <string name="recipe_image">Recipe Image</string>
     <string name="author">Author</string>
+    <string name="work_logo">Work logo</string>
+    <string name="user_image">User image</string>
 </resources>

@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youcook.R;
 import com.example.youcook.databinding.FragmentCreateBinding;
-import com.example.youcook.databinding.FragmentSelectedRecipeBinding;
 import com.example.youcook.ui.create.created_recipe_tag_recycler.CreateTagRecyclerAdapter;
-import com.example.youcook.ui.recipes.RecipesViewModel;
 
 
 public class CreateFragment extends Fragment {
