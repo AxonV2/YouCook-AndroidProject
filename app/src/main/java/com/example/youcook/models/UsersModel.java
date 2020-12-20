@@ -24,10 +24,6 @@ public class UsersModel implements IUsersModel
     public void setPictureURL(String val) { pictureURL = val; }
     //endregion
 
-    public UsersModel()
-    {
-    }
-
     public UsersModel(String EmailValue, String UserNameValue, String PictureURLValue)
     {
         this.userEmail = EmailValue;

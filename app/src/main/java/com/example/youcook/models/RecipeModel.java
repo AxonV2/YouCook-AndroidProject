@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class RecipeModel implements IRecipeModel
 {
-    private Integer recipeID = 0;
+    private Integer recipeID;
     private IUsersModel recipeAuthor;
     private String recipeTitle;
     private String recipeImageURL;

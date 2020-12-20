@@ -27,25 +27,23 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
     //Original list coming from IRecipeModel
     private ArrayList<IRecipeModel> Recipes_Original;
 
-    //Remember you do not want a reference to the list you want a fully new list.
     //This one will be filtered so items will be removed.
     static private ArrayList<IRecipeModel> Recipes_Filtered;
 
     static public ArrayList<IRecipeModel> GetFilteredList(){ return Recipes_Filtered; }
 
-
     public RecyclerViewRecipeAdapter(ArrayList<IRecipeModel> List)
     {
+        //Copies of passed in List
         Recipes_Original = new ArrayList<>(List);
         Recipes_Filtered = new ArrayList<>(List);
     }
-
 
     //Provide custom layout file
     @Override
     public int getItemViewType(final int position)
     {
-        //THE CREATED ITEM LAYOUT XML
+        //CREATED ITEM LAYOUT XML
         return R.layout.recipe_list_recycler_items_layout;
     }
 
@@ -55,15 +53,15 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
     {
         //Give view holder
         View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        return new RecyclerViewHolder(view);
 
+        return new RecyclerViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position)
     {
-        //THIS IS WHERE WE WILL ASSIGN VALUES
+        //THIS IS WHERE WE ASSIGN VALUES
 
         //Call variables held in HolderView and assign them.
         //We use the filtered list in case any filters are applied
@@ -73,20 +71,23 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
         holder.getRecipeCook().setText("Cook " + Recipes_Filtered.get(position).getCookTime() + " Min(s)");
         holder.getRecipeDone().setText("Prep " + Recipes_Filtered.get(position).getDoneTime() + " Min(s)");
 
-        //Using current position against filtered list to get it's image URL
+        //Using current position against filtered list to get image URL
+        String PositionRecipeImage = Recipes_Filtered.get(position).getRecipeImageURL();
 
-        if (!URLUtil.isValidUrl(Recipes_Filtered.get(position).getRecipeImageURL()))
+        //If URL is not valid then that means it's a bitmap
+        if (!URLUtil.isValidUrl(PositionRecipeImage))
         {
-            Bitmap image = BitmapHandler.StringToBitMap(Recipes_Filtered.get(position).getRecipeImageURL());
+            Bitmap image = BitmapHandler.StringToBitMap(PositionRecipeImage);
             //Log.d("Tag", "Testing: " + image + Recipes_Filtered.get(position).getRecipeImageURL());
+
             Glide.with(holder.itemView).load(image)
                     .apply(new RequestOptions().override(1000, 600))
                     .centerCrop()
                     .into(holder.getRecipeImage());
         }
-        else
+        else //Valid URL
         {
-            Glide.with(holder.itemView).load(Recipes_Filtered.get(position).getRecipeImageURL())
+            Glide.with(holder.itemView).load(PositionRecipeImage)
                     .apply(new RequestOptions().override(1000, 600))
                     .centerCrop()
                     .into(holder.getRecipeImage());
@@ -95,9 +96,7 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
         //Recycler variables for Tag Display
         RecyclerView recyclerView = holder.itemView.findViewById(R.id.recipesListTagRecycler);
 
-        //Add the following lines to create RecyclerView
-        //Every item has fixed size?
-        //Used for optimization purposes, will probably have to be set to false.
+        //Following lines create the Tag Recycler for each recipe
         recyclerView.setHasFixedSize(true);
 
         //Layout and Adapter
@@ -105,14 +104,18 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         //Pass in tag size for item count and pass in ID for ViewHolder
-        ListTagsRecycleAdapter adapter = new ListTagsRecycleAdapter(Recipes_Filtered.get(position).getTags().size(), Recipes_Filtered.get(position).getRecipeID());
-        recyclerView.setAdapter(adapter);
+        int TagSize = Recipes_Filtered.get(position).getTags().size();
+        int RecipeID = Recipes_Filtered.get(position).getRecipeID();
+
+        ListTagsRecycleAdapter tagAdapter = new ListTagsRecycleAdapter(TagSize, RecipeID);
+
+        recyclerView.setAdapter(tagAdapter);
     }
 
     @Override
     public int getItemCount()
     {
-        //Will be set to FILTERED list size.
+        //Set to FILTERED list size.
         //This is what specifies how many times onBindViewHolder will run.
         return Recipes_Filtered.size();
     }
@@ -141,18 +144,17 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
                 String passedInFilter = constraint.toString().toLowerCase().trim();
 
                 //Now we check each recipe in the main list to see if it matches.
-                //Using a for each statement
                 for (IRecipeModel recipe : Recipes_Original)
                 {
                     //Once again make it lower case and check if it contains the filter.
-                    //Right now we have filtering by Title and by Quick Description
                     if (recipe.getRecipeTitle().toLowerCase().contains(passedInFilter) || recipe.getRecipeQuickDescription().toLowerCase().contains(passedInFilter))
                         filteredList.add(recipe);
-
-                        //Filter by tags, else to avoid adding repeats, inside the for loop
-                        //we call the outer loop's recipe and check through each of its tags
-                    else {
-                        for (int i = 0; i < recipe.getTags().size(); i++) {
+                    else
+                    {
+                        //Filter by tags, else to avoid adding repeats
+                        //we call the outer loop's recipe and check through each tag
+                        for (int i = 0; i < recipe.getTags().size(); i++)
+                        {
                             if (recipe.getTags().get(i).toLowerCase().contains(passedInFilter))
                                 filteredList.add(recipe);
                         }
@@ -162,6 +164,7 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
 
             //Since method returns FilterResults
             FilterResults results = new FilterResults();
+
             //We store filteredList in results.
             results.values = filteredList;
 
@@ -175,8 +178,6 @@ public class RecyclerViewRecipeAdapter extends RecyclerView.Adapter<RecyclerView
             //Assign the list we made in the last method to our filtered one.
             Recipes_Filtered = new ArrayList<IRecipeModel>((ArrayList)results.values);
 
-            // when called, looks at what items are displayed on the screen at the moment of its call
-            // (more precisely which row indexes ) and calls getView() with those positions.
             notifyDataSetChanged();
         }
     };

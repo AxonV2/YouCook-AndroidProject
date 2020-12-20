@@ -48,36 +48,39 @@ public class SelectedRecipeFragment extends Fragment {
         //Getting recycler in selected recipe fragment
         RecyclerView recyclerView = returningView.findViewById(R.id.FullRecipeTagRecycler);
 
-        //Add the following lines to create RecyclerView
-        //Every item has fixed size?
-        //Used for optimization purposes, will probably have to be set to false.
+        //Following lines create RecyclerView
         recyclerView.setHasFixedSize(true);
 
         //Layout and Adapter
         //This time we set the recycler layout HORIZONTAL for tag display
         recyclerView.setLayoutManager(new LinearLayoutManager(returningView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
         //Will always be set so it wont throw an exception
-        ListTagsRecycleAdapter adapter = new ListTagsRecycleAdapter(RecipesViewModel.getTagListSize(), RecipesViewModel.getSelectedRecipeItemID().getValue());
+        int TagListSize = RecipesViewModel.getTagListSize();
+        int SelectedID = RecipesViewModel.getSelectedRecipeItemID().getValue();
+        ListTagsRecycleAdapter adapter = new ListTagsRecycleAdapter(TagListSize, SelectedID);
         recyclerView.setAdapter(adapter);
 
         //Recipe Image
-        ImageView recipeImage = returningView.findViewById(R.id.FullRecipeImage);
+        ImageView recipeImageView = returningView.findViewById(R.id.FullRecipeImage);
+        String ImageString = RecipesViewModel.getRecipeImageURL();
 
-        if (!URLUtil.isValidUrl(RecipesViewModel.getRecipeImageURL()))
+        //If string is not valid URL then it's a bitmap
+        if (!URLUtil.isValidUrl(ImageString))
         {
-            Bitmap image = BitmapHandler.StringToBitMap(RecipesViewModel.getRecipeImageURL());
+            Bitmap image = BitmapHandler.StringToBitMap(ImageString);
             //Log.d("Tag", "Testing: " + image + Recipes_Filtered.get(position).getRecipeImageURL());
             Glide.with(returningView).load(image)
                     .apply(new RequestOptions().override(1000, 600))
                     .centerCrop()
-                    .into(recipeImage);
+                    .into(recipeImageView);
         }
-        else
+        else //String is valid URL
         {
-            Glide.with(returningView).load(RecipesViewModel.getRecipeImageURL())
+            Glide.with(returningView).load(ImageString)
                     .override(1000,1000)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(recipeImage);
+                    .into(recipeImageView);
         }
 
         //Author Image below recipe
@@ -88,7 +91,6 @@ public class SelectedRecipeFragment extends Fragment {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(authorImage);
 
-        //endregion
 
         //Button to add to favorites.
         Button favBut = returningView.findViewById(R.id.FavoriteButton);

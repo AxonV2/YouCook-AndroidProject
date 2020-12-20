@@ -46,7 +46,7 @@
         tools:layout="@layout/fragment_selected_recipe"/>
     <fragment
         android:id="@+id/nav_favorites"
-        android:name="com.example.youcook.ui.recipes.RecipesFavorites"
+        android:name="com.example.youcook.ui.recipes.FavoritesFragment"
         android:label="@string/menu_favorites"
         tools:layout="@layout/fragment_favorites" >
         <action

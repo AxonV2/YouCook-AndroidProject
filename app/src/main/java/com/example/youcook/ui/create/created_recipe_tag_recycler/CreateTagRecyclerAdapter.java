@@ -4,17 +4,13 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.youcook.R;
 
 public class CreateTagRecyclerAdapter extends RecyclerView.Adapter<CreateTagRecyclerViewHolder>
 {
-    public CreateTagRecyclerAdapter()
-    {
-    }
+    public CreateTagRecyclerAdapter() { }
 
     //Provide custom layout file
     @Override

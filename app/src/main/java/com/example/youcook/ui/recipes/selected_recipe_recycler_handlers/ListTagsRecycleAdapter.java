@@ -24,7 +24,7 @@ public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerVie
     @Override
     public int getItemViewType(final int position)
     {
-        //THE CREATED ITEM LAYOUT XML
+        //CREATED ITEM LAYOUT XML
         return R.layout.recipe_item_recycler_layout;
     }
 
@@ -35,7 +35,6 @@ public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerVie
         View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
 
         //Need ViewModel for selected RecipeID
-        //Passing in specific ID.
         return new TagsRecyclerViewHolder(view, passedInID);
     }
 
@@ -45,7 +44,8 @@ public class ListTagsRecycleAdapter extends RecyclerView.Adapter<TagsRecyclerVie
     {
         //THIS IS WHERE WE WILL ASSIGN VALUES
         //Call variables held in HolderView and assign them.
-        holder.getTagDisplay().setText(TagsRecyclerViewHolder.getRecipeTags().get(position));
+        String TagText = TagsRecyclerViewHolder.getRecipeTags().get(position);
+        holder.getTagDisplay().setText(TagText);
     }
 
     @Override

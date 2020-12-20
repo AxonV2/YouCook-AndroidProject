@@ -9,7 +9,6 @@ public class SQLiteDataMain extends SQLiteOpenHelper
 {
     //Final can only be assigned once,
     //Static remains the same no matter the instance
-    //remember how final works with constructors and instances
     private static final String DB_NAME = "YouCookDB";
     private static final Integer DB_VERSION = 1;
 

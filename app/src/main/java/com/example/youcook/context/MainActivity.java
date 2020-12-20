@@ -1,5 +1,6 @@
 package com.example.youcook.context;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     static public MenuItem searchItem;
     //Database Instance
     static public SQLiteDataMain YouCookDatabase;
-
     //Image to be set by user for create recipe fragment
     static public ImageView imageView;
 
@@ -52,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Database Instance
-        //this = MainActivity Context
+        //this = Context
         YouCookDatabase = SQLiteDataMain.getDB_instance(this);
+
         //to view DB go to VIEW -> TOOL WINDOW -> DEVICE FILE EXPLORER
         //then DATA -> DATA -> APP FOLDER (YOUCOOK) -> DATABASES -> Select and export
         SQLiteDataHelper.GiveValues();
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Passing each menu ID as a set of Ids because each
         //menu should be considered as top level destinations.
-        //Here we pass in each created navigation
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_recipes, R.id.nav_create, R.id.nav_favorites).setDrawerLayout(drawer).build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         //Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
@@ -84,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp()
+    {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
@@ -96,8 +98,10 @@ public class MainActivity extends AppCompatActivity {
     public void addImage(View view)
     {
         //Send to gallery
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        //Images only
         intent.setType("image/*");
+
         startActivityForResult(intent, GET_FROM_GALLERY);
 
         imageView = view.findViewById(R.id.createRecipeImage);
@@ -122,11 +126,13 @@ public class MainActivity extends AppCompatActivity {
 
                 //Give bitmap data
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+
                 CreateViewModel.setCreatedRecipeImage(bitmap);
                 //Log.d("Tag", "onClick：" + bitmap);
 
-                //Load bitmap into create imageview
+                //Load bitmap into create imageview using Glide
                 Glide.with(MainActivity.this).load(bitmap).apply(new RequestOptions().override(1000, 600)).centerCrop().into(imageView);
+
                 //imageView.setImageBitmap(bitmap);
 
             } catch (IOException e)

@@ -14,8 +14,6 @@ import static com.example.youcook.context.MainActivity.YouCookDatabase;
 
 public class SQLiteDataHelper
 {
-    //View to Model to Controller
-    //In this case ViewModel -> Model -> Controller.  And backwards.
     /*
         SQLite creates a unique row id (rowid) automatically.
         This field is usually left out when you use "select * ...", but you can fetch this id by using "select rowid,* ...".
@@ -26,7 +24,6 @@ public class SQLiteDataHelper
         select rowid, * from myTable;
      */
 
-    //Making this return a boolean to check if operation went through.
 
     private static SQLiteDatabase ReadableDB = YouCookDatabase.getReadableDatabase();
     private static SQLiteDatabase WritableDB = YouCookDatabase.getWritableDatabase();
@@ -37,6 +34,7 @@ public class SQLiteDataHelper
 
         String FavoritesQuery = "SELECT * FROM " + SQLiteDataMain.USER_FAVORITES_TABLE + " WHERE UserEmail = ? AND RecipeID = ?";
 
+        //Values for constraints
         Cursor FavoritesResult = ReadableDB.rawQuery(FavoritesQuery,new String[] { AuthorEmail, String.valueOf(RecipeID)});
 
         //If no results are found
@@ -51,9 +49,12 @@ public class SQLiteDataHelper
 
             return 0;
         }
-        else {
+        else
+        {
             //If it already exists remove it
             String removeQuery = "DELETE FROM " + SQLiteDataMain.USER_FAVORITES_TABLE + " WHERE UserEmail = ? AND RecipeID = ?";
+
+            //Values for constraints
             WritableDB.execSQL(removeQuery,new String[] { AuthorEmail, String.valueOf(RecipeID)});
 
             FavoritesResult.close();
@@ -162,7 +163,7 @@ public class SQLiteDataHelper
         //Check if value already exists (tag)
         String TagCheck = "SELECT TagText FROM " + SQLiteDataMain.TAGS_TABLE + " WHERE TagText = ?";
 
-        //Query Result with Email parameter
+
         Cursor TagResults = ReadableDB.rawQuery(TagCheck,new String[] {TagText});
 
         //If no results found tags get added
@@ -197,7 +198,7 @@ public class SQLiteDataHelper
             cv.put("ImageURL", User.getPictureURL());
 
             //Insert into Database.
-            //insert(Table Name, nullColumnHack, ContentValues)
+            //Database.insert(Table Name, nullColumnHack, ContentValues)
             //Writable Database locks database so no other processes can update.
             WritableDB.insert(SQLiteDataMain.USERS_TABLE, null, cv);
 
@@ -225,7 +226,7 @@ public class SQLiteDataHelper
         //Check if value already exists (Email)
         String RecipeCheck = "SELECT ID FROM " + SQLiteDataMain.RECIPES_TABLE + " WHERE ID = ?";
 
-        //Query Result with Email parameter
+        //Query Result
         Cursor RecipeResults = ReadableDB.rawQuery(RecipeCheck,new String[] {String.valueOf(Recipe.getRecipeID())});
 
         //If no results found recipes get added
@@ -243,7 +244,7 @@ public class SQLiteDataHelper
             WritableDB.insert(SQLiteDataMain.RECIPES_TABLE, null, cv);
             cv.clear();
 
-            //We have to make a connection for each tag
+            //Connection for each tag in database
             for (String Tag : Recipe.getTags())
             {
                 cv.put("RecipeID", Recipe.getRecipeID());
@@ -270,7 +271,8 @@ public class SQLiteDataHelper
         Cursor result = ReadableDB.rawQuery(query,null);
 
         //Boolean if there is a first
-        if (result.moveToFirst()) {
+        if (result.moveToFirst())
+        {
             //While there are results
             do {
                 //Get variables
@@ -284,7 +286,7 @@ public class SQLiteDataHelper
                 Integer cookTime = result.getInt(7);
                 Integer doneTime = result.getInt(8);
 
-                //Assign to Model
+                //Assign to Model through factory
                 IRecipeModel recipeModel = ClassInstanceFactory.RecipeFactory(recipeID, GetUser(recipeAuthorEmail),
                         recipeTitle, recipeImage, recipeLongDescription, recipeQuickDescription,prepTime,cookTime,doneTime, GetTags(recipeID));
 
@@ -296,6 +298,7 @@ public class SQLiteDataHelper
 
                 //Add to return List.
                 returnList.add(recipeModel);
+
             } while(result.moveToNext());
         }
         else {
@@ -310,14 +313,13 @@ public class SQLiteDataHelper
 
     public static ArrayList<String> GetTags(Integer RecipeID)
     {
-        //Tags List
+        //Returning Tags List
         ArrayList<String> recipeTags = new ArrayList<String>();
 
         //Check Recipe + Tags table for associations
         String RecipeTagLink = "SELECT TagID FROM " + SQLiteDataMain.RECIPE_TAGS_TABLE + " WHERE RecipeID = ?";
 
-        //Query Result
-        //Parameter passed in
+        //Query Result and parameter
         Cursor IDResults = ReadableDB.rawQuery(RecipeTagLink,new String[] {String.valueOf(RecipeID)});
 
         if (IDResults.moveToFirst())
@@ -328,7 +330,7 @@ public class SQLiteDataHelper
                 //Add tag text that matches ID
                 String tagQuery = "SELECT TagText FROM " + SQLiteDataMain.TAGS_TABLE + " WHERE ID = ?";
 
-                //Parameter passed TagID
+                //Pass in TagID from previous cursor
                 tagResult = ReadableDB.rawQuery(tagQuery,new String[] {String.valueOf(IDResults.getInt(0))});
 
                 if (tagResult.moveToFirst())
@@ -339,6 +341,7 @@ public class SQLiteDataHelper
 
             } while (IDResults.moveToNext());
 
+            //Close inner cursor
             tagResult.close();
         }
 
@@ -350,7 +353,9 @@ public class SQLiteDataHelper
 
     public static ArrayList<String> GetAvailableTags()
     {
+        //Returning list for tag selection
         ArrayList<String> allTags = new ArrayList<>();
+
         String tagQuery = "SELECT * FROM " + SQLiteDataMain.TAGS_TABLE;
         Cursor results = ReadableDB.rawQuery(tagQuery,null);
 
@@ -363,7 +368,6 @@ public class SQLiteDataHelper
         }
 
         results.close();
-
         return allTags;
     }
 
@@ -373,10 +377,19 @@ public class SQLiteDataHelper
 
         //Query Result
         Cursor tagResult = ReadableDB.rawQuery(tagQuery, new String[] { Tag });
-            if (tagResult.moveToFirst())
-                return tagResult.getInt(0);
-            else
-                return 0;
+
+        if (tagResult.moveToFirst())
+        {
+            //Save value so we can close cursor
+            Integer TagID = tagResult.getInt(0);
+
+            tagResult.close();
+
+            return TagID;
+        }
+
+        tagResult.close();
+        return 0;
 
     }
 
@@ -408,10 +421,11 @@ public class SQLiteDataHelper
         Cursor FavoritesResult = ReadableDB.rawQuery(FavoritesQuery,new String[] { AuthorEmail, String.valueOf(RecipeID)});
 
         //Assign value here so we can close cursor before returning
+
+        //If NOT FOUND -> not in favorites
+        //If FOUND -> in favorites
         Boolean result = FavoritesResult.moveToFirst();
 
-        //If first NOT FOUND -> not in favorites
-        //If first FOUND -> in favorites
         FavoritesResult.close();
 
         return result;

@@ -1,5 +1,6 @@
 package com.example.youcook.ui.recipes;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -22,45 +23,40 @@ public class RecipesViewModel extends ViewModel {
     public static LiveData<Integer> getSelectedRecipeItemID() { return selectedRecipeItemID; }
     public static Integer getTagListSize() { return selectedRecipeTagsSize; }
 
-
-    //Setter for selectedRecipeItemID that also assigns every variable
-    public static void setSelectedItem(Integer item)
-    {
-        selectedRecipeItemID.setValue(item);
-
-        //Can't tell if this is good or bad
-        //Lambda used to get instance of passed in ID;
-        IRecipeModel InstanceFromID = RecipeModel.Full_Recipe_List.stream().filter(x -> x.getRecipeID().equals(selectedRecipeItemID.getValue())).collect(Collectors.toList()).get(0);
-
-        //Get tag size for Recycler
-        selectedRecipeTagsSize = InstanceFromID.getTags().size();
-
-        //Recipe Details
-        mutableRecipeTitle.setValue(InstanceFromID.getRecipeTitle());
-        mutableRecipeQuickDescription.setValue(InstanceFromID.getRecipeQuickDescription());
-        mutableRecipeLongDescription.setValue(InstanceFromID.getRecipeLongDescription());
-        mutableRecipePrep.setValue(InstanceFromID.getPrepTime());
-        mutableRecipeCook.setValue(InstanceFromID.getCookTime());
-        mutableRecipeDone.setValue(InstanceFromID.getDoneTime());
-        mutableRecipeImageURL.setValue(InstanceFromID.getRecipeImageURL());
-
-        //Author Details
-        mutableRecipeAuthorEmail.setValue(InstanceFromID.getRecipeAuthor().getUserEmail());
-        mutableAuthorImage.setValue(InstanceFromID.getRecipeAuthor().getPictureURL());
-        mutableRecipeAuthorName.setValue(InstanceFromID.getRecipeAuthor().getUserName());
-
-        UpdateFavoritesButton();
-    }
-
     //Constructor
     public RecipesViewModel() { }
 
+    //Setter for selectedRecipeItemID that also assigns every variable
+    public static void setSelectedItem(IRecipeModel passedRecipe)
+    {
+        selectedRecipeItemID.setValue(passedRecipe.getRecipeID());
+
+        //Get tag size for Recycler
+        selectedRecipeTagsSize = passedRecipe.getTags().size();
+
+        //Recipe Details
+        mutableRecipeTitle.setValue(passedRecipe.getRecipeTitle());
+        mutableRecipeQuickDescription.setValue(passedRecipe.getRecipeQuickDescription());
+        mutableRecipeLongDescription.setValue(passedRecipe.getRecipeLongDescription());
+        mutableRecipePrep.setValue(passedRecipe.getPrepTime());
+        mutableRecipeCook.setValue(passedRecipe.getCookTime());
+        mutableRecipeDone.setValue(passedRecipe.getDoneTime());
+        mutableRecipeImageURL.setValue(passedRecipe.getRecipeImageURL());
+
+        //Author Details
+        mutableRecipeAuthorEmail.setValue(passedRecipe.getRecipeAuthor().getUserEmail());
+        mutableAuthorImage.setValue(passedRecipe.getRecipeAuthor().getPictureURL());
+        mutableRecipeAuthorName.setValue(passedRecipe.getRecipeAuthor().getUserName());
+
+        UpdateFavoritesButton();
+    }
 
     public static void UpdateFavoritesButton()
     {
         //Check if in favorites
         String CurrentUserEmail = mutableRecipeAuthorEmail.getValue();
         Integer CurrentRecipe =  selectedRecipeItemID.getValue();
+
         if(SQLiteDataHelper.InFavorites(CurrentUserEmail, CurrentRecipe))
             favoriteButtonMutable.setValue("Remove from favorites");
         else
@@ -69,7 +65,7 @@ public class RecipesViewModel extends ViewModel {
 
     //In Favorites?
     private static final MutableLiveData<String> favoriteButtonMutable = new MutableLiveData<String>();
-    public static final MutableLiveData<String> getFavoritesButton() { return favoriteButtonMutable; }
+    public static MutableLiveData<String> getFavoritesButton() { return favoriteButtonMutable; }
 
     //Full Recipe Displays
     private static final  MutableLiveData<String> mutableRecipeImageURL = new MutableLiveData<String>();

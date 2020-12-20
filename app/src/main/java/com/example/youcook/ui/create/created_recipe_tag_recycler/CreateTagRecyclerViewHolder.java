@@ -17,12 +17,17 @@ public class CreateTagRecyclerViewHolder extends RecyclerView.ViewHolder
 {
     //Final so it won't read from the database multiple times over
     private static final ArrayList<String> availableRecipeTags = new ArrayList<>(SQLiteDataHelper.GetAvailableTags());
+    public static ArrayList<String> getAvailableRecipeTags(){ return availableRecipeTags; }
+
     private TextView TagDisplay;
+    public TextView getTagDisplay(){ return TagDisplay; }
+
     private FrameLayout TagFrameLayout;
 
     //List for on click event below
     private static ArrayList<String> chosenTags = new ArrayList<>();
     public static ArrayList<String> getChosenTags(){ return chosenTags;}
+
 
     //HERE IS WHERE WE SET UP EVERYTHING RELATED TO DISPLAYING RECIPES.
     //VALUE ASSIGNMENT IS DONE INSIDE ADAPTER
@@ -42,9 +47,9 @@ public class CreateTagRecyclerViewHolder extends RecyclerView.ViewHolder
 
                 //Add to list and
                 //change color to represent it being selected
-                if (chosenTags.contains(clickedTag)){
+                if (chosenTags.contains(clickedTag))
+                {
                     chosenTags.remove(clickedTag);
-
                     TagFrameLayout.setBackgroundColor(Color.parseColor("#C6A300"));
                 }
                 else
@@ -56,6 +61,4 @@ public class CreateTagRecyclerViewHolder extends RecyclerView.ViewHolder
         });
     }
 
-    public static ArrayList<String> getAvailableRecipeTags(){ return availableRecipeTags; }
-    public TextView getTagDisplay(){ return TagDisplay; }
 }

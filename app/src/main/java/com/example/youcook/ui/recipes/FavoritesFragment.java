@@ -16,26 +16,26 @@ import com.example.youcook.context.MainActivity;
 import com.example.youcook.models.IRecipeModel;
 import com.example.youcook.ui.recipes.recipe_list_recycler_handlers.RecyclerViewRecipeAdapter;
 
-public class RecipesFragment extends Fragment {
 
-    private RecyclerViewRecipeAdapter FullRecipeListAdapter;
+public class FavoritesFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
-        View returningView = inflater.inflate(R.layout.fragment_recipes, container, false);
+        View returningView = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         //Using view to get recycler id from fragment
-        RecyclerView recyclerView = returningView.findViewById(R.id.RecipeViewer);
+        RecyclerView recyclerView = returningView.findViewById(R.id.FavoriteViewer);
 
-        // Add the following lines to create RecyclerView
+        //Following lines create RecyclerView
         recyclerView.setHasFixedSize(true);
 
         //Layout and Adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(returningView.getContext()));
 
-        FullRecipeListAdapter = new RecyclerViewRecipeAdapter(IRecipeModel.Full_Recipe_List);
-        recyclerView.setAdapter(FullRecipeListAdapter);
+        //Send FAVORITES list through adapter
+        RecyclerViewRecipeAdapter Adapter = new RecyclerViewRecipeAdapter(IRecipeModel.Favorites_Recipe_List);
+        recyclerView.setAdapter(Adapter);
+
 
         //Static menu item set in MainActivity
         SearchView searchView = (SearchView) MainActivity.searchItem.getActionView();
@@ -48,12 +48,11 @@ public class RecipesFragment extends Fragment {
                 return false;
             }
 
-
             //Real-time filtering.
             @Override
             public boolean onQueryTextChange(String filter)
             {
-                FullRecipeListAdapter.getFilter().filter(filter);
+                Adapter.getFilter().filter(filter);
                 return false;
             }
         });

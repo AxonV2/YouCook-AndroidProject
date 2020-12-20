@@ -16,7 +16,14 @@ import java.util.stream.Collectors;
 public class TagsRecyclerViewHolder extends RecyclerView.ViewHolder
 {
     private static ArrayList<String> RecipeTags;
+    public static ArrayList<String> getRecipeTags(){
+        return RecipeTags;
+    }
+
     private TextView TagDisplay;
+    public TextView getTagDisplay(){
+        return TagDisplay;
+    }
 
     //HERE IS WHERE WE SET UP EVERYTHING RELATED TO DISPLAYING RECIPES.
     //VALUE ASSIGNMENT IS DONE INSIDE ADAPTER
@@ -25,21 +32,17 @@ public class TagsRecyclerViewHolder extends RecyclerView.ViewHolder
         super(itemView);
         TagDisplay = itemView.findViewById(R.id.tagTextDisplay);
 
-        //ID Passed in so we can retrieve tags
+        //Lambda used to get instance of passed in ID;
+        //Note: Raz - Can't tell if this is good or bad
+        IRecipeModel InstanceFromID = RecipeModel.Full_Recipe_List.stream().filter(x -> x.getRecipeID().equals(RecipeID)).collect(Collectors.toList()).get(0);
+
         RecipeTags = new ArrayList<String>()
         {{
-            //Can't tell if this is good or bad
-            //Lambda used to get instance of passed in ID;
-            IRecipeModel InstanceFromID = RecipeModel.Full_Recipe_List.stream().filter(x -> x.getRecipeID().equals(RecipeID)).collect(Collectors.toList()).get(0);
             //Add all tags from given recipe
             addAll(InstanceFromID.getTags());
         }};
     }
 
-    public static ArrayList<String> getRecipeTags(){
-        return RecipeTags;
-    }
-    public TextView getTagDisplay(){
-        return TagDisplay;
-    }
+
+
 }

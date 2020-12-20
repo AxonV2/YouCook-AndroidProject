@@ -10,11 +10,13 @@ public class ClassInstanceFactory
     public static IRecipeModel RecipeFactory(Integer RecipeID, IUsersModel Author , String RecipeTitle,
                                              String ImageURL, String recipeLongDescription, String RecipeQuickDescription , Integer PrepTime, Integer CookTime, Integer DoneTime, ArrayList<String> Tags)
     {
+        //Constraints here
         return new RecipeModel(RecipeID, Author, RecipeTitle, ImageURL, recipeLongDescription, RecipeQuickDescription , PrepTime, CookTime, DoneTime, Tags);
     }
 
     public static IUsersModel UsersFactory(String EmailValue, String UserNameValue, String PictureURLValue)
     {
+        //Constraints here
         return new UsersModel(EmailValue, UserNameValue, PictureURLValue);
     }
 

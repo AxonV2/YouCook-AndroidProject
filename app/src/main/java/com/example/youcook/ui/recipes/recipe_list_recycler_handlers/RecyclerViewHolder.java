@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youcook.R;
+import com.example.youcook.models.IRecipeModel;
 import com.example.youcook.ui.recipes.RecipesViewModel;
 
 public class RecyclerViewHolder extends RecyclerView.ViewHolder
@@ -55,22 +56,25 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder
         //This is returning the array position of clicked recipe.
         //If list is filtered array is also filtered, but all we need is to make list public
         //And then from that position get recipe ID and work off of that?
-        itemView.setOnClickListener(new View.OnClickListener() {
+        itemView.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
                 //Testing
                 //Log.d("Tag", "onClick：" + getAdapterPosition() + " " + RecyclerViewRecipeAdapter.GetFilteredList().get(getAdapterPosition()).getRecipeQuickDescription());
 
-                //From filtered list get current position's ID value.
-                Integer RecipeID = RecyclerViewRecipeAdapter.GetFilteredList().get(getAdapterPosition()).getRecipeID();
+                //Use adapter position to get selected recipe
+                IRecipeModel SelectedRecipe = RecyclerViewRecipeAdapter.GetFilteredList().get(getAdapterPosition());
+
                 //Save it's data to the view model
-                RecipesViewModel.setSelectedItem(RecipeID);
+                RecipesViewModel.setSelectedItem(SelectedRecipe);
 
                 //Trying to navigate controllers not fragments
                 //The (v) passed in findNavController is the View from overwritten onClick
                 //Custom navigation anim made in navigation -> mobile_navigation
-                // note - hike; Don't like this but it works
+
+                //Note - Hike - Don't like this but it works
                 try {
                     Navigation.findNavController(v).navigate(R.id.action_nav_to_selected_recipe);
                 }

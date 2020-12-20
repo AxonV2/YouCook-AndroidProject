@@ -81,7 +81,8 @@
                 android:layout_marginTop="10dp"
                 android:onClick="addImage"
                 android:src="@drawable/youcook_logo_cut"
-                tools:ignore="OnClick" />
+                tools:ignore="OnClick"
+                android:contentDescription="@string/recipe_image_to_use" />
 
             <TextView
                 android:id="@+id/textView9"
